@@ -1,0 +1,21 @@
+{
+  "name": "cartoon-ads",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Short animated ads drawn in code (SVG and HTML): a grey world, one accent colour, a mascot of your own, word-synced captions, rendered frame by frame in headless Chromium.",
+  "license": "MIT",
+  "type": "module",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "setup": "npx playwright install --only-shell chromium",
+    "still": "node engine/render.mjs samples/00-sample still 0.3,2.6,4.4,6.4,9,12.2,14.6",
+    "preview": "node engine/render.mjs samples/00-sample preview",
+    "final": "node engine/render.mjs samples/00-sample final",
+    "overlaps": "node engine/render.mjs samples/00-sample overlaps",
+    "events": "node engine/render.mjs samples/00-sample events",
+    "poster": "node engine/render.mjs samples/00-sample poster 11.9 --out docs/poster.png"
+  },
+  "dependencies": {
+    "playwright": "1.63.0"
+  }
+}

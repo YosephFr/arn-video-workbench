@@ -1,0 +1,18 @@
+{
+  "name": "story-highlights",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Packs of short vertical stories for profile highlights: continuity from story to story, one music bed per pack, the brand close only at the end of the pack, covers, and a reel that joins the pack. Built on the app-tutorial kit.",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "capture": "node ../app-tutorial/tools/capture.mjs --flow samples/getting-started/capture.json",
+    "still": "node engine/render.mjs samples/getting-started/01-create-account still 1,4,8",
+    "preview": "node engine/render.mjs samples/getting-started/01-create-account preview",
+    "covers": "node tools/covers.mjs samples"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "0.1.100",
+    "playwright": "1.63.0"
+  }
+}

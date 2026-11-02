@@ -1,0 +1,40 @@
+# Environment and secrets
+.env
+.env.*
+!.env.example
+
+# Dependencies
+node_modules/
+.venv/
+__pycache__/
+*.pyc
+
+# Generated media and work folders
+assets/fonts/
+work/
+**/voice/
+**/audio/
+**/renders/
+**/frames/
+**/frames*/
+**/builds/
+**/cache/
+**/output/
+**/captures/
+timeline.json
+!docs/**/timeline.json
+events.json
+.cache/
+**/assets/fonts/
+*.mp4
+*.mov
+*.webm
+*.wav
+*.mp3
+*.m4a
+*.aiff
+*.pdf
+*.verify.json
+# Voice profiles built from real recordings (CosyVoice): keep them out of git
+*.ps
+.DS_Store

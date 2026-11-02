@@ -1,0 +1,16 @@
+{
+  "_guide": "Same format as the weekly. `follows` names the video whose pending item this update closes.",
+  "window": { "kind": "update", "from": "2026-11-02", "to": "2026-11-05" },
+  "follows": { "piece": "acme-week", "pending": "Spreadsheet export was in review" },
+  "forbidden": ["Alex", "Sam", "Jordan"],
+  "claims": [
+    {
+      "id": "C1", "says": "Spreadsheet export is live for every workspace, from the export button", "status": "live",
+      "evidence": [
+        { "kind": "ticket", "ref": "[ticket id and title]" },
+        { "kind": "commit", "ref": "[commit SHA]" },
+        { "kind": "deploy", "ref": "[deploy log line]", "at": "[deploy time inside the window]" }
+      ]
+    }
+  ]
+}

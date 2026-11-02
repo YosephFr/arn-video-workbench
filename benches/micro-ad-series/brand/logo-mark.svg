@@ -1,0 +1,6 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" width="512" height="512">
+  <!-- Placeholder mark: replace with your own logo mark (SVG or PNG, square works best). -->
+  <rect x="24" y="24" width="464" height="464" rx="112" fill="#D64B2A"/>
+  <circle cx="246" cy="270" r="128" fill="none" stroke="#FFFFFF" stroke-width="58"/>
+  <circle cx="366" cy="146" r="38" fill="#FFFFFF"/>
+</svg>

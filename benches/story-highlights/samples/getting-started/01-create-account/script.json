@@ -1,0 +1,59 @@
+{
+ "title": "Create your account",
+ "format": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30
+ },
+ "language": "en",
+ "tail": 1.4,
+ "voices": {
+  "narrator": {
+   "provider": "auto",
+   "voice": "${WB_VOICE_NARRATOR}",
+   "model": "eleven_multilingual_v2",
+   "speed": 1.0
+  }
+ },
+ "lines": [
+  {
+   "id": "S1",
+   "voice": "narrator",
+   "start": 0.35,
+   "slot": "Hook: the topic of this story in the first second; the viewer already chose the highlight.",
+   "text": "[clear, full voice] Here's how you create your account."
+  },
+  {
+   "id": "S2",
+   "voice": "narrator",
+   "after": "S1",
+   "gap": 0.5,
+   "slot": "Where to go. Read addresses and buttons exactly as the screen writes them.",
+   "text": "[explaining] Open *yourbrand.example* on your phone or computer."
+  },
+  {
+   "id": "S3",
+   "voice": "narrator",
+   "after": "S2",
+   "gap": 0.5,
+   "slot": "What to do, one action per sentence.",
+   "text": "[explaining] Type your name and work email, then tap *Create account*."
+  },
+  {
+   "id": "S4",
+   "voice": "narrator",
+   "after": "S3",
+   "gap": 0.6,
+   "slot": "Bridge: what comes next, so the viewer taps through to the next story.",
+   "text": "[clear, full voice] Next, you set up your business."
+  }
+ ],
+ "music": {
+  "style": "tutorial",
+  "bpm": 100,
+  "key": "G",
+  "scale": "major",
+  "level": -22,
+  "duck": -6
+ }
+}

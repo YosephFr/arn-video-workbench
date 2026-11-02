@@ -1,0 +1,7 @@
+# Generated: renders, voices, audio, timelines and sound events of every episode.
+renders/
+episodes/*/voice/
+episodes/*/audio/
+episodes/*/renders/
+episodes/*/timeline.json
+episodes/*/events.json

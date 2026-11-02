@@ -1,0 +1,26 @@
+{
+  "speakers": { "host": "host", "orb": "orb" },
+  "min_shot": 2.0,
+  "lines": {
+    "L01": { "cam": ["two_in", "two"],
+             "host": [ { "tag": "brow_up", "at": "-0.1", "until": "end", "amp": 0.7 }, { "tag": "lean_in", "at": "-0.1", "until": "end", "amp": 0.4 } ],
+             "gesture": [ { "hand": "right", "kind": "open", "at": "question", "until": "end+0.2" } ] },
+    "L02": { "cam": ["orb_cu", "orb_cu_in"], "orb": [ { "state": "pulse", "at": "-0.45", "until": "-0.05" } ] },
+    "L03": { "tv": { "cam": ["tv", "tv_focus"], "mv": 1.0,
+                     "evidence": { "kind": "post", "name": "Account Name", "handle": "@account · 2h", "initials": "AN",
+                                   "text": "The claim your dialogue reacts to goes here, in one or two lines.", "caption": "Source · date" } } },
+    "L04": { "cam": ["host_med", "host_med_in"],
+             "host": [ { "tag": "shock", "at": "-0.1", "until": "react", "amp": 0.7 }, { "tag": "smile", "at": "Short", "until": "end+0.3", "amp": 0.8 } ] },
+    "L05": { "tv": { "cam": ["tv_in", "tv_focus"], "mv": 0.9,
+                     "evidence": { "kind": "chart", "title": "Your metric, over time", "subtitle": "Illustrative data", "callout": "+38%" } } },
+    "L06": { "host": [ { "tag": "look_cam", "at": "-0.2", "until": "end+0.1" }, { "tag": "serious", "at": "takeaway", "until": "end", "amp": 0.4 } ] },
+    "L07": { "cam": ["orb_cu_in", "orb_cu"], "orb": [ { "state": "judge", "at": "end+0.1", "until": "end+1.4" } ] }
+  },
+  "titles": [ { "at": 0, "until": "L01:end", "text": ["Your hook,", "as a <em>question</em>?"], "y": 0.17 } ],
+  "pause": { "at": "L06", "through": "L06", "cam": ["pause_wide", "pause_wide_in"],
+             "cards": [ { "at": "L06:takeaway-0.2", "until": "L06:end+0.1", "text": ["One takeaway,", "in plain words"], "covers": ["L06"], "y": 0.22 } ],
+             "sound": "lowpass", "lowpass_hz": 700, "dip_db": -12 },
+  "tail": { "cam": ["wide_in", "wide"], "lead": 0.35, "host": [ { "tag": "smile", "amp": 0.4 } ] },
+  "events": [],
+  "poster": { "cam": "cover", "title": ["Your question,", "in <em>two</em> lines?"] }
+}

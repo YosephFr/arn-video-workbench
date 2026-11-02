@@ -1,0 +1,9 @@
+{
+  "name": "Your Brand",
+  "tagline": "One short line",
+  "url": "yourbrand.example",
+  "colors": { "background": "#F2F4F7", "surface": "#FFFFFF", "ink": "#14161A", "muted": "#626875", "accent": "#3B5BDB", "accent_ink": "#FFFFFF", "positive": "#2B7A4B", "negative": "#B23A3A" },
+  "fonts": { "display": "Plus Jakarta Sans", "body": "Inter", "mono": "JetBrains Mono" },
+  "logo": { "mark": "brand/logo-mark.svg", "wordmark": "brand/logo-wordmark.svg" },
+  "radius": 28
+}

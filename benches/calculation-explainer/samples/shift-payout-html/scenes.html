@@ -1,0 +1,131 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Shift pay explainer</title>
+<!-- The light HTML path: each scene is plain DOM, timed by data-in anchors on the voice (see engine/html/runtime.js).
+     Colours and fonts come from brand.json through CSS variables; the defaults below only matter in a browser preview.
+     Content area: x 150–930 (clear of the platforms' button column), y 470–1250 (clear of the header, the caption
+     block above it and the account/caption area below). Sound effects sit on the element that causes them (data-sfx);
+     `engine/html/render.mjs <piece> events` writes them to events.json. -->
+<style>
+  :root {
+    --bg: #f2f2ef; --surface: #ffffff; --ink: #16171a; --muted: #64666c; --accent: #3355e0; --accent-soft: #e9edfc;
+    --positive: #2f7d4f; --negative: #b4432f; --radius: 28px;
+    --font-display: system-ui, sans-serif; --font-body: system-ui, sans-serif; --font-mono: ui-monospace, monospace;
+    --shadow: 0 18px 50px -18px rgba(22, 23, 26, 0.22), 0 4px 14px -6px rgba(22, 23, 26, 0.10);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { width: 1080px; height: 1920px; overflow: hidden; background: var(--bg); color: var(--ink); font-family: var(--font-body); }
+  body { background: radial-gradient(1150px 1150px at 540px 1060px, rgba(255, 255, 255, 0.7), rgba(255, 255, 255, 0) 70%), var(--bg); }
+  .scene { position: absolute; left: 150px; width: 780px; top: 470px; height: 780px; display: flex; flex-direction: column; gap: 30px; opacity: 0; transform-origin: 540px 300px; }
+  .captions { position: absolute; left: 75px; right: 75px; top: 306px; height: 132px; display: flex; flex-wrap: wrap; align-content: center; justify-content: center; text-align: center; font: 700 54px/1.22 var(--font-display); }
+  .captions span { display: inline-block; margin: 0 0.13em; }
+  .captions .hot { color: var(--accent); }
+
+  h1 { font: 800 64px/1.12 var(--font-display); }
+  .person { display: flex; align-items: center; gap: 26px; }
+  .avatar { width: 112px; height: 112px; border-radius: 50%; background: var(--accent-soft); color: var(--accent); display: grid; place-items: center; font: 800 52px var(--font-display); }
+  .person b { display: block; font: 700 46px var(--font-display); }
+  .person span { font-size: 32px; color: var(--muted); }
+  .chips { display: flex; flex-wrap: wrap; gap: 14px; }
+  .chip { background: var(--surface); box-shadow: var(--shadow); border-radius: 999px; padding: 16px 26px; font-weight: 600; font-size: 30px; }
+
+  .card { background: var(--surface); border-radius: 44px; box-shadow: var(--shadow); padding: 34px 44px 26px; display: flex; flex-direction: column; }
+  .card h2 { font: 700 44px var(--font-display); }
+  .card .sub { font-size: 31px; color: var(--muted); margin: 6px 0 14px; }
+  .row { display: flex; align-items: baseline; justify-content: space-between; gap: 24px; padding: 18px 0; font-size: 37px; font-weight: 600; }
+  .row small { display: block; font-size: 29px; font-weight: 400; color: var(--muted); margin-top: 6px; }
+  .row b { font: 500 40px var(--font-mono); white-space: nowrap; }
+  .row.muted, .row.muted b { color: var(--muted); }
+  .neg { color: var(--negative); }
+  .row.total { align-items: center; margin: 10px -22px 4px; padding: 22px; background: var(--accent-soft); border-radius: 30px; }
+  .row.total span { font: 700 39px var(--font-display); }
+  .row.total b { font: 700 52px var(--font-mono); color: var(--accent); }
+  .bar { display: flex; height: 38px; border-radius: 19px; overflow: hidden; background: #e6e6e3; margin: 0 30px; }
+  .bar i { display: block; height: 100%; }
+  .legend { display: grid; grid-template-columns: repeat(3, 1fr); margin: 0 30px; font-size: 29px; color: var(--muted); }
+  .legend b { display: block; font: 500 37px var(--font-mono); color: var(--ink); margin-top: 6px; }
+
+  .window { width: 640px; margin: 0 auto; border-radius: 40px; box-shadow: var(--shadow); background: var(--surface); }
+  .window img { display: block; }
+  .hl { position: absolute; border: 5px solid var(--accent); opacity: 0; clip-path: inset(0 calc((1 - var(--draw, 1)) * 100%) 0 0); }
+
+  .end { align-items: center; justify-content: center; text-align: center; top: 420px; gap: 26px; }
+  .lockup { display: flex; align-items: center; gap: 40px; }
+  .lockup img { width: 150px; height: 150px; }
+  .lockup b { font: 800 78px var(--font-display); }
+  .end p { font: 600 46px var(--font-display); margin-top: 60px; }
+  .end a { font: 600 38px var(--font-display); color: var(--accent); text-decoration: none; }
+</style>
+</head>
+<body>
+
+<!-- L01 · the case and the question; the rules, once -->
+<section class="scene" data-from="0" data-lead="0.3" data-push>
+  <div class="person" data-in="0" data-drift>
+    <div class="avatar">S</div>
+    <div><b>Sam</b><span>Barista at Acme Café · one shift</span></div>
+  </div>
+  <h1 data-in="0" data-drift>How much did Sam earn?</h1>
+  <div class="chips" data-in="@L01:these" data-drift>
+    <span class="chip">Share 30%</span><span class="chip">Tips 90%</span><span class="chip">Tax 10%</span><span class="chip">Withholding 10%</span>
+  </div>
+</section>
+
+<!-- L02–L03 · sales, tax off first, Sam's share -->
+<section class="scene" data-from="@L02" data-push>
+  <div class="card" data-drift>
+    <h2>Sales</h2><p class="sub">Tax included</p>
+    <div class="row" data-in="@L02:four" data-sfx="tick -26"><span>Sales</span><b data-count="440">$440</b></div>
+    <div class="row" data-in="@L02:Tax"><span>Tax 10%<small>comes off first</small></span><b class="neg" data-count="-40">−$40</b></div>
+    <div class="row" data-in="@L02:four#1"><span>Before tax</span><b data-count="400">$400</b></div>
+    <div class="row total" data-in="@L03:one" data-sfx="tick -26"><span>Sam's share, 30%</span><b data-count="120">$120</b></div>
+  </div>
+  <div class="bar" data-in="@L03:thirty"><i style="width:10%;background:#a9aaae"></i><i style="width:30%;background:var(--accent)"></i><i style="flex:1;background:color-mix(in srgb, var(--accent) 45%, #fff)"></i></div>
+  <div class="legend" data-in="@L03:thirty+0.3"><span>Tax<b>$40</b></span><span>Sam<b>$120</b></span><span>Café<b>$240</b></span></div>
+</section>
+
+<!-- L04 · tips -->
+<section class="scene" data-from="@L04" data-push>
+  <div class="card" data-drift>
+    <h2>Tips</h2><p class="sub">Shared between Sam and the café</p>
+    <div class="row" data-in="@L04:fifty"><span>Tips</span><b data-count="50">$50</b></div>
+    <div class="row total" data-in="@L04:ninety" data-sfx="tick -26" data-sfx-at="@L04:forty"><span>Sam keeps 90%</span><b data-count="45" data-count-at="@L04:forty" data-before="?">$45</b></div>
+    <div class="row muted" data-in="@L04:forty+0.4"><span>The café keeps 10%</span><b>$5</b></div>
+  </div>
+</section>
+
+<!-- L05–L06 · the running ledger and the total -->
+<section class="scene" data-from="@L05" data-push>
+  <div class="card" data-drift>
+    <h2>Sam earned</h2><p class="sub">This shift</p>
+    <div class="row" data-in="0.2"><span>Sam's share<small>30% of $400</small></span><b data-count="120" data-sign="+">+$120</b></div>
+    <div class="row" data-in="0.35"><span>Tips<small>90% of $50</small></span><b data-count="45" data-sign="+">+$45</b></div>
+    <div class="row" data-in="@L05:Withholding"><span>Withholding<small>10% of the share, not of the tips</small></span><b class="neg" data-count="-12" data-count-at="@L05:twelve" data-before="?">−$12</b></div>
+    <div class="row total" data-in="@L06:one" data-sfx="coin -22"><span>Sam earned</span><b data-count="153">$153</b></div>
+  </div>
+</section>
+
+<!-- L07 · the same numbers on the real screen: a window of the capture, rings on measured elements -->
+<section class="scene" data-from="@L07" data-push>
+  <div class="window" data-in="0" data-drift data-sfx="whoosh -28" data-sfx-at="@L07">
+    <div class="screen" data-capture="shift/01-shift" data-window="8,156,377,446">
+      <div class="hl" data-el="@share" data-in="@L07:share" data-out="@L07:tips"></div>
+      <div class="hl" data-el="@tips" data-in="@L07:tips" data-out="@L07:withholding"></div>
+      <div class="hl" data-el="@withholding" data-in="@L07:withholding" data-out="@L07:total"></div>
+      <div class="hl" data-el="@total" data-in="@L07:total"></div>
+    </div>
+  </div>
+</section>
+
+<!-- L08 · end card -->
+<section class="scene end" data-from="@L08" data-lead="0.6" data-hide-captions data-push>
+  <div class="lockup" data-in="0"><img data-brand="mark" alt=""><b data-brand="name">Your Brand</b></div>
+  <p data-in="0.9" data-brand="tagline">One short line</p>
+  <a data-in="1.2" data-brand="url">yourbrand.example</a>
+</section>
+
+<div class="captions" data-captions data-replace='{"four hundred forty dollars": "$440", "four hundred": "$400", "thirty percent": "30%", "one hundred twenty": "$120", "fifty dollars": "$50", "ninety percent": "90%", "forty-five": "$45", "ten percent": "10%", "twelve": "$12", "one hundred fifty-three dollars": "$153"}'></div>
+</body>
+</html>

@@ -1,0 +1,21 @@
+{
+  "name": "progress-report-video",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Weekly product progress video: animated logo, one headline metric, a real before/after of the same screen, the big feature explained, a quick list and a brand close (Skia via @napi-rs/canvas, captures via headless Playwright).",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "screens": "bash samples/acme-week/make-screens.sh",
+    "check": "node tools/check-claims.mjs samples/acme-week",
+    "still": "node engine/render.mjs samples/acme-week still 1.2,6,14,22,30,40",
+    "preview": "node engine/render.mjs samples/acme-week preview",
+    "final": "node engine/render.mjs samples/acme-week final",
+    "poster": "node engine/render.mjs samples/acme-week poster --out docs/poster.png"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "0.1.100",
+    "playwright": "1.63.0"
+  }
+}

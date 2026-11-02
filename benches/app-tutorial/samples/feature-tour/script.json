@@ -1,0 +1,109 @@
+{
+ "title": "Turn on booking reminders",
+ "format": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30
+ },
+ "language": "en",
+ "tail": 4.2,
+ "voices": {
+  "narrator": {
+   "provider": "auto",
+   "voice": "${WB_VOICE_NARRATOR}",
+   "model": "eleven_multilingual_v2",
+   "speed": 1.0
+  }
+ },
+ "lines": [
+  {
+   "id": "L01",
+   "voice": "narrator",
+   "start": 0.3,
+   "slot": "Hook, first 2 seconds: what the viewer gets from this feature, in one sentence.",
+   "text": "[confident, full voice] Remind every customer before their *booking*."
+  },
+  {
+   "id": "L02",
+   "voice": "narrator",
+   "after": "L01",
+   "gap": 0.45,
+   "slot": "Step: where the feature lives. Name every button exactly as the screen writes it.",
+   "text": "[explaining] Go to *Settings*."
+  },
+  {
+   "id": "L03",
+   "voice": "narrator",
+   "after": "L02",
+   "gap": 0.45,
+   "slot": "Step: one action per line, then a short pause: viewers cannot scroll back.",
+   "text": "[explaining] Tap *Reminders*, and switch them *on*."
+  },
+  {
+   "id": "L04",
+   "voice": "narrator",
+   "after": "L03",
+   "gap": 0.45,
+   "slot": "Step: the choice the viewer makes, read from the screen.",
+   "text": "[explaining] Choose *when* they go out. Say, *one hour* before."
+  },
+  {
+   "id": "L05",
+   "voice": "narrator",
+   "after": "L04",
+   "gap": 0.45,
+   "slot": "Show the other side: what the customer, the guest or the teammate sees.",
+   "text": "[explaining] Here is the message your customer gets."
+  },
+  {
+   "id": "L06",
+   "voice": "narrator",
+   "after": "L05",
+   "gap": 0.4,
+   "slot": "Step: the button that confirms, named as the screen writes it.",
+   "text": "[explaining] Looks good? Tap *Save*."
+  },
+  {
+   "id": "L07",
+   "voice": "narrator",
+   "after": "L06",
+   "gap": 0.5,
+   "slot": "Result: what is now true, in plain words. Claim only what the product does today.",
+   "text": "[clear, full voice] From now on, every booking gets its reminder."
+  },
+  {
+   "id": "L08",
+   "voice": "narrator",
+   "after": "L07",
+   "gap": 0.7,
+   "slot": "Brand close: your name and your one short line, spoken over the end card.",
+   "text": "[upbeat, not over the top] *Your Brand*. One short line."
+  }
+ ],
+ "music": {
+  "style": "tutorial",
+  "bpm": 104,
+  "key": "D",
+  "scale": "major",
+  "level": -22,
+  "duck": -6,
+  "sections": [
+   {
+    "at": 0,
+    "mood": "intro"
+   },
+   {
+    "at": "L02",
+    "mood": "main"
+   },
+   {
+    "at": "L07",
+    "mood": "lift"
+   },
+   {
+    "at": "L08",
+    "mood": "outro"
+   }
+  ]
+ }
+}

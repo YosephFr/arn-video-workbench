@@ -1,0 +1,14 @@
+{
+  "host": {
+    "skin": "#C68863",
+    "hair": { "style": "swept", "color": "#2b1e16", "sweep": -0.3 },
+    "eyes": { "iris": "#4f3a26", "lid": "crease" },
+    "brows": { "arch": 0.7 },
+    "beard": { "style": "none" },
+    "shirt": "#3e6a52", "collar": true, "tie": null,
+    "glasses": { "shape": "round", "color": "#15171c" }
+  },
+  "orb": { "color": "brand.accent", "particles": 3200, "eyes": "glow", "accessory": "bowtie", "bowtie": "#1d2433" },
+  "set": { "lamp": false, "plant": true, "city": "night", "led": "brand.accent",
+           "tv": { "level": 0.55, "evidence_level": 0.66, "tokens": true } }
+}

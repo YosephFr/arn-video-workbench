@@ -1,0 +1,118 @@
+{
+  "workspace": "Acme Platform",
+  "period": "Last 7 days",
+  "days": [
+    {
+      "day": "Mon",
+      "sessions": 520
+    },
+    {
+      "day": "Tue",
+      "sessions": 610
+    },
+    {
+      "day": "Wed",
+      "sessions": 584
+    },
+    {
+      "day": "Thu",
+      "sessions": 655
+    },
+    {
+      "day": "Fri",
+      "sessions": 498
+    },
+    {
+      "day": "Sat",
+      "sessions": 236
+    },
+    {
+      "day": "Sun",
+      "sessions": 379
+    }
+  ],
+  "teams": [
+    {
+      "team": "Engineering",
+      "members": 46,
+      "sessions": 941,
+      "views": 288,
+      "change": 12
+    },
+    {
+      "team": "Support",
+      "members": 38,
+      "sessions": 702,
+      "views": 254,
+      "change": 9
+    },
+    {
+      "team": "Sales",
+      "members": 31,
+      "sessions": 516,
+      "views": 171,
+      "change": -4
+    },
+    {
+      "team": "Design",
+      "members": 18,
+      "sessions": 412,
+      "views": 136,
+      "change": 8
+    },
+    {
+      "team": "Operations",
+      "members": 27,
+      "sessions": 368,
+      "views": 102,
+      "change": 3
+    },
+    {
+      "team": "Marketing",
+      "members": 22,
+      "sessions": 241,
+      "views": 88,
+      "change": 15
+    },
+    {
+      "team": "Finance",
+      "members": 14,
+      "sessions": 172,
+      "views": 53,
+      "change": -2
+    },
+    {
+      "team": "Springfield office",
+      "members": 18,
+      "sessions": 130,
+      "views": 34,
+      "change": 6
+    }
+  ],
+  "recent": [
+    {
+      "name": "Workspace activity",
+      "date": "Mon 2 Nov",
+      "format": "CSV",
+      "type": "Manual"
+    },
+    {
+      "name": "Team usage",
+      "date": "Fri 30 Oct",
+      "format": "CSV",
+      "type": "Manual"
+    },
+    {
+      "name": "Reports viewed by team",
+      "date": "Wed 28 Oct",
+      "format": "CSV",
+      "type": "Manual"
+    },
+    {
+      "name": "Workspace activity",
+      "date": "Mon 26 Oct",
+      "format": "CSV",
+      "type": "Manual"
+    }
+  ]
+}

@@ -1,0 +1,76 @@
+{
+  "title": "First episode (guiding sample)",
+  "idea": "001",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 30
+  },
+  "language": "en",
+  "tail": 4.2,
+  "voices": {
+    "narrator": {
+      "provider": "auto",
+      "voice": "${WB_VOICE_NARRATOR}",
+      "model": "eleven_multilingual_v2",
+      "speed": 1.05
+    },
+    "customer": {
+      "provider": "auto",
+      "voice": "${WB_VOICE_CUSTOMER}",
+      "model": "eleven_multilingual_v2",
+      "speed": 1.05
+    }
+  },
+  "lines": [
+    {
+      "id": "L01",
+      "voice": "narrator",
+      "text": "[punchy, confident] Hook: the problem, in *three* words.",
+      "start": 0.3
+    },
+    {
+      "id": "L02",
+      "voice": "narrator",
+      "text": "[clear, warm] Then the one message this episode leaves behind.",
+      "after": "L01",
+      "gap": 0.3
+    },
+    {
+      "id": "L03",
+      "voice": "customer",
+      "text": "[pleased, natural] Proof: one line from someone it *helped*.",
+      "after": "L02",
+      "gap": 0.35,
+      "effect": "voice-note",
+      "caption": false
+    }
+  ],
+  "card": {
+    "offer": "Your offer, in one line",
+    "sub": "Its conditions, in small print",
+    "cta": "acme.example"
+  },
+  "music": {
+    "provider": "procedural",
+    "style": "playful",
+    "bpm": 112,
+    "key": "A",
+    "scale": "major",
+    "level": -20,
+    "sections": [
+      {
+        "at": 0,
+        "mood": "intro"
+      },
+      {
+        "at": "L02",
+        "mood": "main"
+      },
+      {
+        "at": "L03",
+        "mood": "lift"
+      }
+    ]
+  }
+}

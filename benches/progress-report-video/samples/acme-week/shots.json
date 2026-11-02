@@ -1,0 +1,11 @@
+{
+  "viewport": { "width": 1024, "height": 1320, "dpr": 2 },
+  "clock": "2026-11-02T09:00:00Z",
+  "timezone": "UTC",
+  "read_only": true,
+  "shots": [
+    { "id": "before-reports", "url": "${BEFORE}/", "wait_for": "body[data-ready]" },
+    { "id": "after-reports", "url": "${AFTER}/", "wait_for": "body[data-ready]" },
+    { "id": "after-schedule", "url": "${AFTER}/#schedule", "wait_for": "body[data-ready]" }
+  ]
+}

@@ -1,0 +1,21 @@
+{
+ "title": "Getting started",
+ "folder": "1 · Getting started",
+ "stories": [
+  "01-create-account",
+  "02-set-up",
+  "03-ready"
+ ],
+ "titles": [
+  "Create your account",
+  "Set up in three steps",
+  "You're ready"
+ ],
+ "cover": {
+  "icon": "user-plus",
+  "name": "Start"
+ },
+ "extras": [
+  "renders/cover.png"
+ ]
+}

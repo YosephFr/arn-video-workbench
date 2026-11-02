@@ -1,0 +1,20 @@
+{
+  "name": "Acme",
+  "tagline": "One short line about what you do.",
+  "url": "acme.example",
+  "colors": {
+    "background": "#F2F2F4",
+    "surface": "#FFFFFF",
+    "ink": "#2B2C31",
+    "muted": "#64656E",
+    "accent": "#E35A14",
+    "accent_ink": "#FFFFFF",
+    "positive": "#2F7D4F",
+    "negative": "#B4432F"
+  },
+  "fonts": { "display": "Baloo 2", "body": "Nunito", "mono": "JetBrains Mono" },
+  "logo": { "mark": null, "wordmark": null, "text": "acme", "weight": 800, "dot": true },
+  "radius": 28,
+  "currency": "$",
+  "locale": "en-US"
+}

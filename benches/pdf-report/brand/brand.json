@@ -1,0 +1,29 @@
+{
+  "name": "Your Brand",
+  "tagline": "One short line",
+  "url": "yourbrand.example",
+  "colors": {
+    "background": "#FFFFFF",
+    "surface": "#FFFFFF",
+    "ink": "#161618",
+    "muted": "#5E5E63",
+    "accent": "#13706A",
+    "accent_ink": "#FFFFFF",
+    "positive": "#2F7D4F",
+    "negative": "#B4432F"
+  },
+  "fonts": { "display": "Be Vietnam Pro", "body": "Manrope", "mono": "JetBrains Mono" },
+  "logo": { "mark": null, "wordmark": "brand/logo.svg" },
+  "radius": 12,
+  "pdf": {
+    "weights": { "display": 800, "title": 600, "body": 400, "bold": 700 },
+    "soft": "#F0F0F2",
+    "zebra": "#F7F7F8",
+    "grid": "#EDEDEE",
+    "projected": "#85858B",
+    "on_dark_muted": "#C8C8CD",
+    "logo_png": "brand/logo.png",
+    "logo_height": 26,
+    "margin": 44
+  }
+}

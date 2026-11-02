@@ -1,0 +1,38 @@
+#!/usr/bin/env bash
+# Two-character studio commands (the Python tools of this bench, with the repo's environment).
+#   studio plan    <piece>            direction.json + timeline.json -> plan.json + events.json
+#   studio prep    <piece>            orb voice treatment + frozen-beat music treatment (before `wb mix`)
+#   studio qa      <piece> [opts]     QA report + contact sheet of renders/final.mp4
+#   studio contact <video> <out.jpg>  contact sheet of any video (HLG aware)
+#   studio align   <piece> [ids]      word timings for takes made outside `wb voice` (local TTS, recordings)
+#   studio voicefx <in.wav> <out.wav> [--preset robot|robot_light]
+#   studio build   <piece> [render options]   the whole chain: voice, timeline, plan, music, prep, mix, final, qa
+# Python: $WB_PYTHON, else the repo's .venv, else python3 (needs numpy and pillow; faster-whisper for the line check).
+set -euo pipefail
+BENCH="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+ROOT="$(cd "$BENCH/../.." && pwd)"
+PY="${WB_PYTHON:-}"
+if [ -z "$PY" ]; then PY=python3; [ -x "$ROOT/.venv/bin/python" ] && PY="$ROOT/.venv/bin/python"; fi
+export PYTHONPATH="$ROOT/core/python${PYTHONPATH:+:$PYTHONPATH}"
+WB="$ROOT/core/bin/wb"
+cmd="${1:-help}"; [ $# -gt 0 ] && shift
+case "$cmd" in
+  plan)    exec "$PY" "$BENCH/tools/plan.py" "$@" ;;
+  prep)    exec "$PY" "$BENCH/tools/prep_audio.py" "$@" ;;
+  qa)      exec "$PY" "$BENCH/tools/qa.py" "$@" ;;
+  contact) exec "$PY" "$BENCH/tools/contact.py" "$@" ;;
+  align)   exec "$PY" "$BENCH/tools/align_takes.py" "$@" ;;
+  voicefx) exec "$PY" "$BENCH/tools/voicefx.py" "$@" ;;
+  build)
+    piece="$1"; shift
+    "$WB" voice "$piece"
+    "$WB" timeline "$piece"
+    "$PY" "$BENCH/tools/plan.py" "$piece"
+    "$WB" music "$piece"
+    "$PY" "$BENCH/tools/prep_audio.py" "$piece"
+    "$WB" mix "$piece"
+    node "$BENCH/engine/render.mjs" "$piece" final "$@"
+    "$PY" "$BENCH/tools/qa.py" "$piece"
+    ;;
+  *) sed -n '2,10p' "$0" | sed 's/^# \{0,1\}//' ;;
+esac

@@ -1,0 +1,45 @@
+{
+  "title": "Acme Platform · update, 5 November",
+  "_guide": "The \"update\" variant: short, between weeklies, only what the last weekly did not cover. Its window starts where the last video ended. The hook is closing what the last video left pending (\"in review\" then, \"live\" now). Same rules as the weekly: impersonal, complete sentences, claims backed in evidence/claims.json.",
+  "kind": "update",
+  "window": { "from": "2026-11-02", "to": "2026-11-05" },
+  "format": { "width": 1080, "height": 1920, "fps": 60 },
+  "language": "en",
+  "tail": 2.6,
+  "voices": {
+    "narrator": { "provider": "auto", "voice": "${WB_VOICE_NARRATOR}", "model": "eleven_multilingual_v2", "speed": 1.04 }
+  },
+  "lines": [
+    {
+      "id": "U01", "voice": "narrator", "start": 0.6, "takes": 3,
+      "text": "[confident] A short update on Acme Platform since Monday.",
+      "claims": [],
+      "slot": "Opening sting: what this update covers and since when."
+    },
+    {
+      "id": "U02", "voice": "narrator", "after": "U01", "gap": 0.45, "takes": 3,
+      "text": "Spreadsheet export, in review on Monday, is now *live* for every workspace.",
+      "claims": ["C1"],
+      "slot": "The hook: what the last video left pending is now live. Say both states."
+    },
+    {
+      "id": "U03", "voice": "narrator", "after": "U02", "gap": 0.4, "takes": 3,
+      "text": "Any report can be downloaded as a spreadsheet from the *export* button.",
+      "claims": ["C1"],
+      "slot": "Where to find it, on the real screen."
+    },
+    {
+      "id": "U04", "voice": "narrator", "after": "U03", "gap": 0.6, "takes": 3,
+      "text": "Acme Platform. The full weekly update arrives on Monday.",
+      "claims": [],
+      "slot": "Brand close and when the next weekly arrives."
+    }
+  ],
+  "music": {
+    "provider": "procedural",
+    "style": "pulse", "bpm": 100, "key": "D", "scale": "major",
+    "sections": [ { "at": 0, "mood": "intro" }, { "at": "U02", "mood": "main" }, { "at": "U04", "mood": "outro" } ],
+    "prompt": ["clean modern product music", "confident and warm", "no vocals"]
+  },
+  "mix": { "lufs": -14 }
+}

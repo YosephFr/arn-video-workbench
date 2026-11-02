@@ -1,0 +1,13 @@
+{
+  "name": "shift",
+  "url": "${ROOT}/benches/app-tutorial/samples/mock-app/index.html",
+  "mode": "app",
+  "clock": "2026-03-06T16:30:00Z",
+  "timezone": "UTC",
+  "locale": "en-US",
+  "fonts": "${ROOT}/assets/fonts",
+  "steps": [
+    { "goto": "#shift" },
+    { "capture": "shift", "measure": { "ledger": ".ledger", "sales": ".ledger .line:nth-child(1)", "share": "#share", "tips": "#tips", "withholding": "#withholding", "total": "#total" } }
+  ]
+}

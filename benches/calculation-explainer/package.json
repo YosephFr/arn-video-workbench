@@ -1,0 +1,21 @@
+{
+  "name": "calculation-explainer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Explains how an amount is calculated: cards whose amounts count up as the voice names them, a running ledger, the total, then the app screen with the same numbers. Canvas path (built on the app-tutorial kit) and a light HTML path.",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "capture": "node ../app-tutorial/tools/capture.mjs --flow samples/shift-payout/capture.json && node ../app-tutorial/tools/capture.mjs --flow samples/shift-payout-html/capture.json",
+    "still": "node engine/render.mjs samples/shift-payout still 2,6,10,14,18,22,26",
+    "preview": "node engine/render.mjs samples/shift-payout preview",
+    "final": "node engine/render.mjs samples/shift-payout final",
+    "html:still": "node engine/html/render.mjs samples/shift-payout-html still 2,6,10,14,18",
+    "html:preview": "node engine/html/render.mjs samples/shift-payout-html preview",
+    "poster": "node engine/render.mjs samples/shift-payout poster 35.4 --out docs/poster.png"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "0.1.100",
+    "playwright": "1.63.0"
+  }
+}

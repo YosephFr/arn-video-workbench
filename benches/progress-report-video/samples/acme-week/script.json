@@ -1,0 +1,82 @@
+{
+  "title": "Acme Platform · week of 26 October",
+  "_guide": "Placeholder week. Keep the structure (opening → one metric → before/after → big feature → quick list → close), replace every line with what is live in production, and keep the `slot` notes until the piece is done. Every line that states a fact lists its claims; evidence/claims.json backs each claim. Narration is impersonal: no team names, no second person. Sentences stay complete: never cut one to fit a duration. Any language works; the voice provider decides the accent.",
+  "kind": "weekly",
+  "window": { "from": "2026-10-26", "to": "2026-11-02" },
+  "format": { "width": 1080, "height": 1920, "fps": 60 },
+  "language": "en",
+  "tail": 2.8,
+  "voices": {
+    "narrator": { "provider": "auto", "voice": "${WB_VOICE_NARRATOR}", "model": "eleven_multilingual_v2", "speed": 1.04 }
+  },
+  "lines": [
+    {
+      "id": "L01", "voice": "narrator", "start": 0.7, "takes": 3,
+      "text": "[confident] These are the improvements that reached Acme Platform this week.",
+      "claims": [],
+      "slot": "Opening: one impersonal sentence that frames the window. Plays over the logo."
+    },
+    {
+      "id": "L02", "voice": "narrator", "after": "L01", "gap": 0.5, "takes": 3,
+      "text": "Weekly active workspaces reached *one thousand two hundred thirty-four*, twelve percent more than the week before.",
+      "claims": ["C1"],
+      "slot": "ONE headline metric from production, written in words so captions match the voice, with its comparison."
+    },
+    {
+      "id": "L03", "voice": "narrator", "after": "L02", "gap": 0.45, "takes": 3,
+      "text": "The reports screen was rebuilt, and here it is with the same data, before and *now*.",
+      "claims": ["C2"],
+      "slot": "Before/after: name the screen and say it is the same data. The divider sweeps on the anchor word set in film.mjs."
+    },
+    {
+      "id": "L04", "voice": "narrator", "after": "L03", "gap": 0.35, "takes": 3,
+      "text": "Totals now sit on top, and the whole table *exports* in one step.",
+      "claims": ["C2", "C3"],
+      "slot": "What changed on that screen, one change per clause: each clause gets a ring on the element it names."
+    },
+    {
+      "id": "L05", "voice": "narrator", "after": "L04", "gap": 0.5, "takes": 3,
+      "text": "The big feature of the week is *scheduled reports*.",
+      "claims": ["C4"],
+      "slot": "Name the big feature of the week."
+    },
+    {
+      "id": "L06", "voice": "narrator", "after": "L05", "gap": 0.3, "takes": 3,
+      "text": "A saved view is chosen, a day and a time are set, and the report arrives by email with the latest data.",
+      "claims": ["C4"],
+      "slot": "How it works in two or three steps, impersonal (passive voice works well). Each step appears on its word."
+    },
+    {
+      "id": "L07", "voice": "narrator", "after": "L06", "gap": 0.35, "takes": 3,
+      "text": "Scheduling is already live for every workspace.",
+      "claims": ["C4"],
+      "slot": "Who has it today. The real screen comes in here."
+    },
+    {
+      "id": "L08", "voice": "narrator", "after": "L07", "gap": 0.55, "takes": 3,
+      "text": "Also live this week: faster exports, search with a keyboard shortcut, and clearer change badges.",
+      "claims": ["C5", "C6", "C7"],
+      "slot": "The rest of the week, quickly: three to five short items, each live in production."
+    },
+    {
+      "id": "L09", "voice": "narrator", "after": "L08", "gap": 0.6, "takes": 3,
+      "text": "Acme Platform, updated every week.",
+      "claims": [],
+      "slot": "Brand close: the product name and the cadence. No call to action needed for partners."
+    }
+  ],
+  "music": {
+    "provider": "procedural",
+    "style": "pulse", "bpm": 100, "key": "D", "scale": "major",
+    "sections": [
+      { "at": 0, "mood": "intro" },
+      { "at": "L02", "mood": "build" },
+      { "at": "L03", "mood": "main" },
+      { "at": "L05", "mood": "lift" },
+      { "at": "L08", "mood": "main" },
+      { "at": "L09", "mood": "outro" }
+    ],
+    "prompt": ["clean modern product music", "confident and warm", "light percussion", "no vocals"]
+  },
+  "mix": { "lufs": -14 }
+}

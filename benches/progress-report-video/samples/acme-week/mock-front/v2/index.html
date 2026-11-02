@@ -1,0 +1,111 @@
+<!doctype html>
+<!-- Mock "now" build of the same fake dashboard (second revision of the throwaway repo). Same API, same data:
+     totals on top, one-step export, search with a shortcut and the new scheduled reports (#schedule opens the sheet). -->
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reports · Acme</title>
+<style>
+  :root { --bg: #f4f4f5; --surface: #fff; --ink: #18181b; --muted: #6b6b73; --accent: #4f5bd5; --soft: #ececf9; --pos: #2f7d4f; --neg: #b4432f; --r: 14px; }
+  * { box-sizing: border-box; }
+  body { margin: 0; font: 15px/1.45 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; color: var(--ink); background: var(--bg); }
+  header { display: flex; align-items: center; gap: 28px; padding: 0 28px; height: 64px; background: var(--surface); box-shadow: 0 1px 12px rgba(20,20,30,.06); }
+  .logo { display: flex; align-items: center; gap: 10px; font-weight: 800; font-size: 18px; }
+  .logo i { width: 28px; height: 28px; border-radius: 8px; background: var(--accent); display: inline-block; }
+  nav a { color: var(--muted); text-decoration: none; font-weight: 500; margin-right: 22px; }
+  nav a.on { color: var(--ink); font-weight: 700; }
+  main { padding: 26px 28px; }
+  .head { display: flex; align-items: flex-end; justify-content: space-between; margin-bottom: 18px; }
+  h1 { font-size: 30px; margin: 0; letter-spacing: 0; }
+  .sub { color: var(--muted); margin-top: 2px; }
+  .kpis { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin-bottom: 18px; }
+  .kpi { background: var(--surface); border-radius: var(--r); padding: 16px 18px; box-shadow: 0 6px 22px rgba(20,20,30,.06); }
+  .kpi small { color: var(--muted); font-size: 13px; }
+  .kpi b { display: block; font-size: 30px; margin-top: 2px; }
+  .tools { display: flex; gap: 10px; align-items: center; margin-bottom: 14px; }
+  .search { flex: 1; display: flex; align-items: center; gap: 8px; height: 44px; padding: 0 14px; background: var(--surface); border-radius: var(--r); color: var(--muted); box-shadow: 0 4px 16px rgba(20,20,30,.05); }
+  .search kbd { margin-left: auto; font: 600 12px/1 system-ui; background: var(--bg); border-radius: 6px; padding: 5px 7px; color: var(--muted); }
+  button { font: 600 15px system-ui; height: 44px; padding: 0 18px; border: 0; border-radius: var(--r); cursor: pointer; }
+  .ghost { background: var(--soft); color: var(--accent); }
+  .primary { background: var(--accent); color: #fff; }
+  .card { background: var(--surface); border-radius: var(--r); box-shadow: 0 6px 22px rgba(20,20,30,.06); overflow: hidden; }
+  table { width: 100%; border-collapse: collapse; }
+  th { text-align: left; font-size: 13px; color: var(--muted); font-weight: 600; padding: 14px 18px 10px; }
+  td { padding: 12px 18px; }
+  tbody tr:nth-child(odd) td { background: #fafafb; }
+  td.n, th.n { text-align: right; font-variant-numeric: tabular-nums; }
+  .chip { display: inline-block; min-width: 56px; text-align: center; border-radius: 999px; padding: 3px 10px; font-weight: 700; font-size: 13px; }
+  .chip.up { background: #e6f2ea; color: var(--pos); } .chip.down { background: #f6e9e6; color: var(--neg); }
+  .chart { margin-top: 18px; padding: 16px 18px 34px; }
+  .chart h2 { font-size: 15px; margin: 0 0 12px; }
+  .bars { display: flex; align-items: flex-end; gap: 14px; height: 160px; }
+  .bars div { flex: 1; background: var(--accent); opacity: .85; border-radius: 8px 8px 4px 4px; position: relative; }
+  .bars span { position: absolute; bottom: -24px; left: 0; right: 0; text-align: center; color: var(--muted); font-size: 12px; }
+  .recent { margin-top: 18px; padding: 16px 18px 8px; }
+  .recent h2 { font-size: 15px; margin: 0 0 8px; }
+  .row { display: flex; align-items: center; gap: 12px; padding: 10px 0; }
+  .row i { width: 34px; height: 34px; border-radius: 10px; background: var(--soft); display: inline-block; }
+  .row b { font-weight: 600; } .row span { color: var(--muted); font-size: 13px; } .row em { margin-left: auto; font-style: normal; color: var(--accent); font-weight: 600; }
+  .scrim { position: fixed; inset: 0; background: rgba(20,20,30,.28); display: none; }
+  .sheet { position: fixed; top: 0; right: 0; bottom: 0; width: 460px; background: var(--surface); box-shadow: -12px 0 40px rgba(20,20,30,.18); padding: 28px; display: none; }
+  :target .scrim, :target .sheet, body.schedule .scrim, body.schedule .sheet { display: block; }
+  .sheet h3 { font-size: 24px; margin: 0 0 4px; }
+  .sheet p { color: var(--muted); margin: 0 0 20px; }
+  .field { background: var(--bg); border-radius: var(--r); padding: 12px 14px; margin-bottom: 12px; }
+  .field small { display: block; color: var(--muted); font-size: 12px; }
+  .field b { font-size: 16px; }
+  .days { display: flex; gap: 8px; margin-bottom: 12px; }
+  .days span { flex: 1; text-align: center; padding: 10px 0; border-radius: 10px; background: var(--bg); font-weight: 600; color: var(--muted); }
+  .days span.on { background: var(--accent); color: #fff; }
+  .sheet .primary { width: 100%; margin-top: 10px; }
+</style>
+</head>
+<body>
+<header><span class="logo"><i></i>Acme</span><nav><a href="#">Overview</a><a class="on" href="#">Reports</a><a href="#">Settings</a></nav></header>
+<main>
+  <div class="head"><div><h1>Reports</h1><div class="sub">Workspace activity · Last 7 days</div></div></div>
+  <div class="kpis" id="kpis"></div>
+  <div class="tools">
+    <div class="search">Search teams and reports<kbd>⌘K</kbd></div>
+    <button class="ghost">Export</button>
+    <button class="primary" id="schedule-open">Schedule</button>
+  </div>
+  <div class="card">
+    <table>
+      <thead><tr><th>Team</th><th class="n">Active members</th><th class="n">Sessions</th><th class="n">Reports viewed</th><th class="n">Change</th></tr></thead>
+      <tbody id="rows"></tbody>
+    </table>
+  </div>
+  <div class="card chart"><h2>Sessions per day</h2><div class="bars" id="bars"></div></div>
+  <div class="card recent"><h2>Recent reports</h2><div id="recent"></div></div>
+</main>
+<div id="schedule"><div class="scrim"></div>
+  <aside class="sheet" id="schedule-sheet">
+    <h3>Schedule this report</h3>
+    <p>Sent by email with the latest data.</p>
+    <div class="field"><small>Saved view</small><b>Workspace activity · Last 7 days</b></div>
+    <div class="days"><span class="on">Mon</span><span>Tue</span><span>Wed</span><span>Thu</span><span>Fri</span></div>
+    <div class="field"><small>Time</small><b>09:00</b></div>
+    <div class="field"><small>Send to</small><b>team@acme.example</b></div>
+    <button class="primary">Schedule report</button>
+  </aside>
+</div>
+<script>
+  const fmt = (n) => n.toLocaleString('en-US')
+  if (location.hash === '#schedule') document.body.classList.add('schedule')
+  fetch('/api/report.json').then((r) => r.json()).then((d) => {
+    const sum = (k) => d.teams.reduce((a, t) => a + t[k], 0)
+    document.getElementById('kpis').innerHTML = [['Total active members', sum('members')], ['Total sessions', sum('sessions')], ['Total reports viewed', sum('views')]]
+      .map(([k, v]) => `<div class="kpi"><small>${k}</small><b>${fmt(v)}</b></div>`).join('')
+    document.getElementById('rows').innerHTML = d.teams.map((t) =>
+      `<tr><td>${t.team}</td><td class="n">${fmt(t.members)}</td><td class="n">${fmt(t.sessions)}</td><td class="n">${fmt(t.views)}</td>` +
+      `<td class="n"><span class="chip ${t.change < 0 ? 'down' : 'up'}">${t.change > 0 ? '+' : ''}${t.change}%</span></td></tr>`).join('')
+    const max = Math.max(...d.days.map((x) => x.sessions))
+    document.getElementById('bars').innerHTML = d.days.map((x) => `<div style="height:${(x.sessions / max) * 100}%"><span>${x.day}</span></div>`).join('')
+    document.getElementById('recent').innerHTML = d.recent.map((r) => `<div class="row"><i></i><div><b>${r.name}</b><br><span>${r.date} · ${r.format} · ${r.type}</span></div><em>Open</em></div>`).join('')
+    document.body.dataset.ready = '1'
+  })
+</script>
+</body>
+</html>

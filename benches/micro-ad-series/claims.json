@@ -1,0 +1,26 @@
+{
+ "_doc": "What the scripts may and may not say. tools/lint-script.mjs checks every spoken line and the end-card copy against this file. 'allowed' lists the claims your product can prove today (each idea points to one by id); 'forbidden' patterns are errors, 'warn' patterns are warnings. Patterns are case-insensitive regular expressions matched on accent-free text.",
+ "product": "Acme",
+ "allowed": [
+  { "id": "C1", "claim": "[What the product really does, in one sentence you can prove]", "proof": "[Where it is shown: a screen, a demo, a document]" },
+  { "id": "C2", "claim": "[A second claim, also provable]", "proof": "[Where it is shown]" },
+  { "id": "C3", "claim": "[An offer that is live, with its conditions]", "proof": "[Pricing page or terms]" }
+ ],
+ "competitors": ["[Competitor name]", "[Another competitor]"],
+ "forbidden": [
+  { "pattern": "\\bguarantee(d|s)?\\b|\\b100 ?%|\\brisk[- ]free\\b|\\bno risk\\b", "why": "Promised results: ad platforms reject unrealistic outcomes, and they are hard to prove." },
+  { "pattern": "\\b(double|triple|10x)\\b.*\\b(sales|income|clients|revenue)\\b|\\bget rich\\b|\\bpassive income\\b", "why": "Income or growth promises (unrealistic financial outcomes)." },
+  { "pattern": "\\byou('re| are) (losing|wasting) (money|clients|customers)\\b|\\byour (debt|weight|health)\\b", "why": "Asserts a personal (financial or health) situation about the viewer; say it about the situation instead." },
+  { "pattern": "\\b(the )?best (app|tool|product|service) (in|on) (the )?(world|market)\\b|\\bnumber one\\b|#1\\b", "why": "Superlatives you cannot prove." },
+  { "pattern": "\\bcheaper than\\b|\\bbetter than\\b|\\bunlike (other|the other) apps\\b", "why": "Comparisons need proof; never name a competitor." },
+  { "pattern": "\\b(in|within) (one|two|three|five|ten|\\d+) (seconds?|minutes?)\\b", "why": "Time promises the product may not keep (set-up time, waiting time)." },
+  { "pattern": "\\[(whisper|whispers|whispering|softly|quietly|intimate|hushed)[^\\]]*\\]", "why": "No whispered voices, ever: these direction tags make many voices whisper." }
+ ],
+ "warn": [
+  { "pattern": "\\binstant(ly)?\\b|\\bimmediately\\b|\\breal[- ]time\\b|\\b24/7\\b", "why": "Check the real latency or availability before saying it." },
+  { "pattern": "\\bautomatic(ally)?\\b", "why": "Say what is automatic and what still needs a tap." },
+  { "pattern": "\\b(thousands|millions|hundreds) of\\b|\\b\\d+ ?%", "why": "Figures need a source you can show." },
+  { "pattern": "\\bfree\\b", "why": "Free with which conditions? Put them on the end card (card.sub or card.fine)." },
+  { "pattern": "\\bnever\\b|\\balways\\b|\\beveryone\\b|\\bno one\\b", "why": "Absolutes are rarely true; prefer what happens in a typical case." }
+ ]
+}

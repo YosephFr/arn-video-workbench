@@ -1,0 +1,24 @@
+{
+  "title": "Your question, as a title",
+  "format": { "width": 1080, "height": 1920, "fps": 60 },
+  "language": "en",
+  "tail": 2.4,
+  "voices": {
+    "host": { "provider": "auto", "voice": "${WB_VOICE_HOST}", "model": "eleven_multilingual_v2", "speed": 1.0, "tempo": 1.06,
+              "settings": { "stability": 0.45, "similarity_boost": 0.8, "style": 0.35, "use_speaker_boost": true } },
+    "orb":  { "provider": "auto", "voice": "${WB_VOICE_ORB}", "model": "eleven_multilingual_v2", "speed": 0.95, "tempo": 1.04, "fx": "robot",
+              "settings": { "stability": 0.7, "similarity_boost": 0.8, "style": 0.05, "use_speaker_boost": true } }
+  },
+  "lines": [
+    { "id": "L01", "voice": "host", "text": "[curious] Okay, open with the one question your viewer already has?", "start": 0.35 },
+    { "id": "L02", "voice": "orb",  "text": "[dry, calm] Then I answer with the fact that changes the picture.", "after": "L01", "gap": 0.35 },
+    { "id": "L03", "voice": "orb",  "text": "The proof goes on the screen behind us: a post, a chart, a number.", "after": "L02", "gap": 0.3 },
+    { "id": "L04", "voice": "host", "text": "[surprised] And I react the way the audience would. Short and honest.", "after": "L03", "gap": 0.35 },
+    { "id": "L05", "voice": "orb",  "text": "Second piece of evidence. It lands right on the cut.", "after": "L04", "gap": 0.3 },
+    { "id": "L06", "voice": "host", "text": "[warm] Here the room stands still, and I give the takeaway in plain words.", "after": "L05", "gap": 0.4 },
+    { "id": "L07", "voice": "orb",  "text": "[deadpan] And I close on the *punchline*. No sign-off needed.", "after": "L06", "gap": 0.6 }
+  ],
+  "music": { "provider": "procedural", "style": "ambient", "bpm": 84, "key": "D", "scale": "minor", "level": -27, "duck": -9,
+             "sections": [ { "at": 0, "mood": "intro" }, { "at": "L04", "mood": "build" }, { "at": "L07", "mood": "outro" } ] },
+  "mix": { "lufs": -15.5 }
+}

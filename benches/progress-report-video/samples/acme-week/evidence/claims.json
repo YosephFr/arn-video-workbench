@@ -1,0 +1,47 @@
+{
+  "_guide": "One entry per claim the video makes, in voice or on screen. A claim is shown only if its status is live (in production) or approved (by the provider: public listing, console). Each evidence item points at something checkable: a commit, a deploy log line, a release tag, a ticket, a read-only query. Replace every [bracketed slot]; tools/check-claims.mjs --strict refuses to pass while one is left.",
+  "window": { "kind": "weekly", "from": "2026-10-26", "to": "2026-11-02" },
+  "forbidden": ["Alex", "Sam", "Jordan"],
+  "claims": [
+    {
+      "id": "C1", "says": "Weekly active workspaces: 1,234, +12% vs. the previous week", "status": "live",
+      "evidence": [
+        { "kind": "query", "ref": "[saved query or dashboard link that returns the number]", "at": "[2026-11-02T08:00Z]", "note": "Read on a read-only replica with last week's definition of active" }
+      ]
+    },
+    {
+      "id": "C2", "says": "The reports screen was rebuilt: totals on top, same data", "status": "live",
+      "evidence": [
+        { "kind": "commit", "ref": "[commit SHA of the merge]", "note": "[pull request title]" },
+        { "kind": "deploy", "ref": "[deploy log line or release tag]", "at": "[deploy time inside the window]" }
+      ]
+    },
+    {
+      "id": "C3", "says": "The whole table exports in one step", "status": "live",
+      "evidence": [
+        { "kind": "commit", "ref": "[commit SHA]" },
+        { "kind": "deploy", "ref": "[deploy log line]", "at": "[deploy time]" }
+      ]
+    },
+    {
+      "id": "C4", "says": "Scheduled reports are live for every workspace", "status": "live",
+      "evidence": [
+        { "kind": "ticket", "ref": "[ticket id and title]" },
+        { "kind": "commit", "ref": "[commit SHA]" },
+        { "kind": "deploy", "ref": "[deploy log line with the feature flag at 100%]", "at": "[deploy time]" }
+      ]
+    },
+    {
+      "id": "C5", "says": "Faster exports", "status": "live",
+      "evidence": [ { "kind": "deploy", "ref": "[deploy log line]", "at": "[deploy time]" }, { "kind": "query", "ref": "[before/after timing measurement]" } ]
+    },
+    {
+      "id": "C6", "says": "Search has a keyboard shortcut", "status": "live",
+      "evidence": [ { "kind": "commit", "ref": "[commit SHA]" }, { "kind": "deploy", "ref": "[deploy log line]", "at": "[deploy time]" } ]
+    },
+    {
+      "id": "C7", "says": "Clearer change badges in the reports table", "status": "live",
+      "evidence": [ { "kind": "commit", "ref": "[commit SHA]" }, { "kind": "deploy", "ref": "[deploy log line]", "at": "[deploy time]" } ]
+    }
+  ]
+}

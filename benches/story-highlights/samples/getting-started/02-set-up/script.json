@@ -1,0 +1,51 @@
+{
+ "title": "Set up in three steps",
+ "format": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30
+ },
+ "language": "en",
+ "tail": 1.4,
+ "voices": {
+  "narrator": {
+   "provider": "auto",
+   "voice": "${WB_VOICE_NARRATOR}",
+   "model": "eleven_multilingual_v2",
+   "speed": 1.0
+  }
+ },
+ "lines": [
+  {
+   "id": "S1",
+   "voice": "narrator",
+   "start": 0.35,
+   "slot": "Opens on the screen the previous story ended on.",
+   "text": "[explaining] Give your business a *name*. Your customers see it."
+  },
+  {
+   "id": "S2",
+   "voice": "narrator",
+   "after": "S1",
+   "gap": 0.5,
+   "slot": "The next choice, and the reassurance that it can change later.",
+   "text": "[explaining] Pick the days you *open*. You can change them any time."
+  },
+  {
+   "id": "S3",
+   "voice": "narrator",
+   "after": "S2",
+   "gap": 0.5,
+   "slot": "Result of this story.",
+   "text": "[clear, full voice] Done. Your business is ready for bookings."
+  }
+ ],
+ "music": {
+  "style": "tutorial",
+  "bpm": 100,
+  "key": "G",
+  "scale": "major",
+  "level": -22,
+  "duck": -6
+ }
+}

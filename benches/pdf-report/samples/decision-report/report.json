@@ -1,0 +1,241 @@
+{
+  "_guide": "An empty guiding report. Keep the shape (decision page, scale page, projection page), replace every [bracketed slot] and every sample figure with your own, and keep a source for each number. Blocks and their options are listed at the top of engine/blocks.py. Any language works: set the date, currency and texts accordingly.",
+  "meta": {
+    "title": "[Report title] · [what is being decided]",
+    "subject": "[One sentence: the question this report answers, and the cut-off date of its data.]",
+    "author": "Your Brand",
+    "date": "[Report date]",
+    "running_title": "Your Brand · [Report title]",
+    "filename": "decision-report.pdf",
+    "currency": {"symbol": "$", "thousands": ",", "decimal": ".", "decimals": 0, "position": "prefix"}
+  },
+  "pages": [
+    {
+      "blocks": [
+        {"type": "title", "text": "[Headline that states the decision]"},
+        {
+          "type": "lead",
+          "text": "[One or two sentences: what was compared, for whom, and what the recommendation rests on.]"
+        },
+        {
+          "type": "metrics",
+          "items": [
+            {"value": "1,234", "label": "[KPI 1: what it counts, over which period]", "note": 1},
+            {"value": "56%", "label": "[KPI 2: a share or a rate]"},
+            {"value": "7,890", "label": "[KPI 3: a volume, last 30 days]", "note": 2},
+            {"value": "12 GB", "label": "[KPI 4: a size or a capacity]"}
+          ]
+        },
+        {
+          "type": "paragraph",
+          "text": "<b>Recommended: [Option A]</b>, because [the reason that decides it]. [Option B] costs less at first; [what it needs before it can be chosen]."
+        },
+        {
+          "type": "comparison",
+          "cards": [
+            {
+              "theme": "dark",
+              "title": "[Option A]",
+              "price": "sum",
+              "unit": "per month",
+              "meta": "[Where it runs · terms]",
+              "items": [
+                {"title": "[Line item 1]", "detail": "[What it covers · size]", "price": 120},
+                {"title": "[Line item 2]", "detail": "[What it covers · size]", "price": 90},
+                {"title": "[Line item 3]", "detail": "[What it covers · size]", "price": 300},
+                {"title": "[Line item 4]", "detail": "[What it covers · size]", "price": 45},
+                {"title": "[Line item 5]", "detail": "[What it covers · size]", "price": 25},
+                {"title": "[Line item 6]", "detail": "[What it covers · size]", "price": 60}
+              ],
+              "footer": "Budget with a 20% reserve: {total*1.2}"
+            },
+            {
+              "theme": "light",
+              "title": "[Option B]",
+              "price": "sum",
+              "unit": "per month",
+              "meta": "[Where it runs · terms]",
+              "items": [
+                {"title": "[Line item 1]", "detail": "[What it covers · size]", "price": 150},
+                {"title": "[Line item 2]", "detail": "[What it covers · size]", "price": 65},
+                {"title": "[Line item 3]", "detail": "[What it covers · size]", "price": 250},
+                {"title": "[Line item 4]", "detail": "[What it covers · size]", "price": 45},
+                {"title": "[Line item 5]", "detail": "[What it covers · size]", "price": 30},
+                {"title": "[Line item 6]", "detail": "[What it covers · size]", "price": 60}
+              ],
+              "footer": "Budget with a 20% reserve: {total*1.2}"
+            }
+          ]
+        },
+        {
+          "type": "footnotes",
+          "items": ["Sample figures: replace each one with your own and keep its source below.", "¹ [What KPI 1 counts and what it leaves out.]", "² [Where KPI 3 comes from and when it was read.]"]
+        },
+        {
+          "type": "note",
+          "text": "[Units and period of every amount (for example: monthly, before tax), what is not included, and how figures are rounded.]"
+        },
+        {
+          "type": "sources",
+          "label": "Sources:",
+          "links": [
+            {"label": "[Source A]", "url": "https://example.com/source-a"},
+            {"label": "[Source B]", "url": "https://example.com/source-b"},
+            {"label": "[Pricing page]", "url": "https://example.com/pricing"}
+          ]
+        }
+      ]
+    },
+    {
+      "blocks": [
+        {"type": "title", "text": "[What changes with scale]"},
+        {
+          "type": "lead",
+          "text": "[One sentence on the variable that drives the cost as volume grows, and the path that avoids it.]"
+        },
+        {
+          "type": "table",
+          "groups": [{"label": "[Path 1]", "from": 1, "to": 2}, {"label": "[Path 2]", "from": 3, "to": 4}],
+          "columns": [
+            {"label": "[Volume]", "width": 1.25},
+            {"label": "[Option A]", "align": "right", "format": "money"},
+            {"label": "[Option B]", "align": "right", "format": "money"},
+            {"label": "[Option A]", "align": "right", "format": "money"},
+            {"label": "[Option B]", "align": "right", "format": "money"}
+          ],
+          "rows": [
+            ["Today¹", 640, 600, 640, 600],
+            ["×10", 1100, 1000, 1900, 1700],
+            ["×100", 4000, 4400, 12000, 10500],
+            ["×1,000", 25000, 29000, 90000, 80000]
+          ],
+          "bold_rows": [0]
+        },
+        {
+          "type": "footnotes",
+          "items": ["Sample figures. ¹ [What \"today\" measures and when it was read; what each path assumes.]"]
+        }
+      ],
+      "sections": [
+        {
+          "heading": "[What each option needs at each scale]",
+          "blocks": [
+            {
+              "type": "table",
+              "compact": true,
+              "zebra": true,
+              "columns": [
+                {"label": "[Scale]", "width": 0.7},
+                {"label": "[Shared resources]²", "width": 1},
+                {"label": "[Option A]", "width": 1.6},
+                {"label": "[Option B]", "width": 1.6}
+              ],
+              "rows": [
+                ["×10", "[size]", "[plan or instance · size]", "[plan or instance · size]"],
+                ["×100", "[size]", "[plan or instance · size]", "[plan or instance · size]"],
+                ["×1,000", "[size]", "[plan or instance · size]", "[plan or instance · size]"]
+              ]
+            },
+            {
+              "type": "footnotes",
+              "items": ["² [Units of the table above, and what changes past the last row.]"]
+            }
+          ]
+        },
+        {
+          "heading": "Before you decide",
+          "heading_size": 13,
+          "blocks": [
+            {
+              "type": "columns",
+              "items": [
+                {
+                  "title": "[Prerequisite]",
+                  "body": "[What must be true before choosing, in one or two short sentences.]"
+                },
+                {"title": "[Risk to control]", "body": "[What could go wrong and how it is kept in check.]"},
+                {
+                  "title": "[How to validate]",
+                  "body": "[The test that proves the choice with real usage before committing.]"
+                }
+              ]
+            },
+            {
+              "type": "note",
+              "text": "[Model assumptions in one line: per-unit usage, retention, what is priced separately.]",
+              "gap": 16
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "blocks": [
+        {"type": "title", "text": "[Projection headline]"},
+        {
+          "type": "lead",
+          "text": "[What is projected, from which baseline, and what it is not (for example: an estimate, not an invoice).]"
+        },
+        {
+          "type": "metrics",
+          "items": [
+            {"value": "[Jan 2026]", "label": "[Baseline: the first month that counts]"},
+            {"value": "$3,200", "label": "[Accumulated to date]"},
+            {"value": "$7,410", "label": "[Accumulated at the end of the horizon]"}
+          ]
+        },
+        {
+          "type": "paragraph",
+          "size": 9.5,
+          "text": "[Growth assumption in one sentence: <b>rate per month</b>, its source, and the sensitivity range of the end value.]"
+        },
+        {
+          "type": "chart",
+          "caption_left": "[Series name]",
+          "caption_right": "Observed  /  projected from [month]",
+          "labels": ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov"],
+          "values": [40, 44, 51, 55, 62, 68, 73, 79, 84, 90, 95],
+          "projected_from": 6,
+          "y_max": 110,
+          "grid": [25, 50, 75, 100],
+          "height": 80
+        },
+        {
+          "type": "table",
+          "compact": true,
+          "band_from": 6,
+          "bold_rows": [5, 10],
+          "columns": [
+            {"label": "Month", "width": 1.1},
+            {"label": "[Units]", "align": "right", "format": "raw"},
+            {"label": "[Amount for the period]", "align": "right", "format": "money", "width": 1.3},
+            {"label": "[Accumulated]", "align": "right", "format": "money", "width": 1.3}
+          ],
+          "rows": [
+            ["Jan", 40, 400, 400],
+            ["Feb", 44, 440, 840],
+            ["Mar", 51, 510, 1350],
+            ["Apr", 55, 550, 1900],
+            ["May", 62, 620, 2520],
+            ["Jun", 68, 680, 3200],
+            ["Jul", 73, 730, 3930],
+            ["Aug", 79, 790, 4720],
+            ["Sep", 84, 840, 5560],
+            ["Oct", 90, 900, 6460],
+            ["Nov", 95, 950, 7410]
+          ]
+        },
+        {
+          "type": "note",
+          "text": "Sample figures. [How the projection is computed, which costs it includes, and what would move it the most.]",
+          "gap": 12
+        },
+        {
+          "type": "sources",
+          "label": "Sources:",
+          "links": [{"label": "[Where the observed values come from]", "url": "https://example.com/data"}]
+        }
+      ]
+    }
+  ]
+}

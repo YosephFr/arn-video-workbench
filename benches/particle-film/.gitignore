@@ -1,0 +1,10 @@
+# Generated: Node modules, stipple cache, exported procedural plates, probe sheets and every piece's outputs.
+node_modules/
+.cache/
+renders/
+plates/procedural/
+samples/*/voice/
+samples/*/audio/
+samples/*/renders/
+samples/*/timeline.json
+samples/*/events.json

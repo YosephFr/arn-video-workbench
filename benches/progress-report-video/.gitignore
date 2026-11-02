@@ -1,0 +1,10 @@
+# Generated or downloaded: rebuilt by the commands in README.md
+node_modules/
+assets/fonts/
+samples/*/voice/
+samples/*/audio/
+samples/*/renders/
+samples/*/captures/
+samples/*/timeline.json
+samples/*/events.json
+__pycache__/

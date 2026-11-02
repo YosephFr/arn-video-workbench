@@ -1,0 +1,19 @@
+{
+  "name": "app-tutorial",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Feature tutorials on real app screenshots: full phone frame, camera push-ins on measured controls, taps, word-synced captions (Skia via @napi-rs/canvas).",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "capture": "node tools/capture.mjs --flow samples/feature-tour/capture.json",
+    "check": "node engine/render.mjs samples/feature-tour check --social",
+    "still": "node engine/render.mjs samples/feature-tour still 1,5,9,13,17,21",
+    "preview": "node engine/render.mjs samples/feature-tour preview",
+    "final": "node engine/render.mjs samples/feature-tour final"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "0.1.100",
+    "playwright": "1.63.0"
+  }
+}

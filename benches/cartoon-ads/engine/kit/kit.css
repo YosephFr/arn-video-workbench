@@ -1,0 +1,36 @@
+/* The stage. Colours and fonts come from brand.json (K.boot sets these variables). */
+:root {
+  --paper: #F2F2F4; --paper2: #E8E8EB; --paper3: #DCDCE0; --ink: #2B2C31; --muted: #64656E; --surface: #FFFFFF;
+  --accent: #E35A14; --accent-ink: #FFFFFF;
+  --display: ui-rounded, system-ui, sans-serif; --body: system-ui, sans-serif; --mono: ui-monospace, monospace;
+}
+html, body { margin: 0; padding: 0; background: #000; }
+#frame { position: absolute; left: 0; top: 0; width: 1080px; height: 1920px; overflow: hidden; transform-origin: 0 0;
+  font-family: var(--body); color: var(--ink); -webkit-font-smoothing: antialiased; text-rendering: geometricPrecision;
+  font-kerning: normal; font-feature-settings: 'kern' 1; }
+.root { position: absolute; inset: 0; }
+.root.top { z-index: 50; pointer-events: none; }
+.root > *, .layer > * { position: absolute; left: 0; top: 0; }
+.layer { position: absolute; inset: 0; }
+.words .w { display: inline-block; white-space: pre; }
+.display { font-family: var(--display); font-weight: 700; line-height: 1.02; }
+
+/* captions: the words of the voice, inside the Reels safe area (clear of the buttons on the right) */
+.cap { position: absolute; left: 96px; right: 168px; text-align: center; font-family: var(--display); font-weight: 700;
+  font-size: 78px; line-height: 1.08; transform: translateY(-50%); z-index: 30; }
+.cap .w { display: inline-block; transform-origin: 50% 80%; }
+.cap-paper { color: var(--ink); }
+.cap-paper .hot { color: var(--accent); }
+.cap-accent, .cap-ink { color: var(--paper); }
+.cap-accent .hot, .cap-ink .hot { background: var(--paper); border-radius: 0.24em; padding: 0 0.16em; }
+.cap-accent .hot { color: var(--accent); }
+.cap-ink .hot { color: var(--ink); }
+/* over busy scenes every word sits on its own tile */
+.cap-tile .w { background: var(--paper); color: var(--ink); border-radius: 0.24em; padding: 0.02em 0.16em; margin: 0.04em 0; }
+.cap-tile .hot { background: var(--accent); color: var(--accent-ink); }
+/* the viral explainer captions: heavy capitals, two lines at most, light on a dark ground */
+.cap-caps { color: var(--paper); font-family: var(--body); font-weight: 900; font-size: 60px; line-height: 1.12; text-transform: uppercase; }
+.cap-caps .hot { text-decoration: underline; text-decoration-thickness: 6px; text-underline-offset: 8px; }
+/* typed word by word with a cursor (captions: { theme: 'typewriter' }, or typed: true with any theme) */
+.cap-typewriter { color: var(--paper); font-family: var(--mono); font-weight: 700; font-size: 56px; line-height: 1.16; }
+.cap-typewriter .hot { color: var(--accent); }

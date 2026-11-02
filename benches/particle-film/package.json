@@ -1,0 +1,23 @@
+{
+  "name": "particle-film",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Narrative brand film drawn frame by frame with stippled particles, pencil strokes and light (Skia via @napi-rs/canvas).",
+  "license": "MIT",
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "plates": "node tools/plates.mjs",
+    "still": "node engine/render.mjs samples/first-film still 0.6,3,6,8.5,10.5,12.5,14,16,20.5,22,24",
+    "sheet": "node engine/render.mjs samples/first-film sheet 0:25:1",
+    "preview": "node engine/render.mjs samples/first-film preview",
+    "final": "node engine/render.mjs samples/first-film final",
+    "poster": "node engine/render.mjs samples/first-film poster --out docs/poster.png",
+    "events": "node engine/render.mjs samples/first-film events",
+    "probe": "node tools/probe-plate.mjs procedural:person '{}' '{\"gamma\":1.4,\"edge\":1.2}'"
+  },
+  "dependencies": {
+    "@napi-rs/canvas": "0.1.100"
+  }
+}

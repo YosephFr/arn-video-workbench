@@ -1,0 +1,12 @@
+{
+  "name": "two-character-studio",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Two characters (a stylised human host and an AI particle orb) in a 3D night office, rendered headless frame by frame with Three.js.",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "1.63.0",
+    "three": "0.170.0"
+  }
+}

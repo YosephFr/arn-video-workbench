@@ -1,0 +1,114 @@
+{
+ "title": "How a shift's pay adds up",
+ "format": {
+  "width": 1080,
+  "height": 1920,
+  "fps": 30
+ },
+ "language": "en",
+ "tail": 4.2,
+ "money": {
+  "locale": "en-US",
+  "currency": "USD",
+  "decimals": 0
+ },
+ "voices": {
+  "narrator": {
+   "provider": "auto",
+   "voice": "${WB_VOICE_NARRATOR}",
+   "model": "eleven_multilingual_v2",
+   "speed": 1.0
+  }
+ },
+ "lines": [
+  {
+   "id": "L01",
+   "voice": "narrator",
+   "start": 0.3,
+   "slot": "Hook: one concrete case and the question the viewer has. Then the rules, once.",
+   "text": "[confident, full voice] Sam, a barista at Acme Café, worked one shift. How much did Sam earn? With these rules, here is how it adds up."
+  },
+  {
+   "id": "L02",
+   "voice": "narrator",
+   "after": "L01",
+   "gap": 0.5,
+   "slot": "First step: the starting amount, then what comes off first. Numbers as words, so captions match the voice.",
+   "text": "[explaining] Sales came to *four hundred forty dollars*, tax included. Tax comes off first: that leaves *four hundred*."
+  },
+  {
+   "id": "L03",
+   "voice": "narrator",
+   "after": "L02",
+   "gap": 0.45,
+   "slot": "The rule applied, and its result.",
+   "text": "[explaining] Sam keeps *thirty percent* of that: *one hundred twenty*."
+  },
+  {
+   "id": "L04",
+   "voice": "narrator",
+   "after": "L03",
+   "gap": 0.5,
+   "slot": "A second source of money, with its own rule.",
+   "text": "[explaining] Tips were *fifty dollars*, and Sam keeps *ninety percent*: *forty-five*."
+  },
+  {
+   "id": "L05",
+   "voice": "narrator",
+   "after": "L04",
+   "gap": 0.5,
+   "slot": "What is taken off, and what it is NOT applied to (the detail people get wrong).",
+   "text": "[clear, full voice] Withholding takes *ten percent* of the share, not of the tips: minus *twelve*."
+  },
+  {
+   "id": "L06",
+   "voice": "narrator",
+   "after": "L05",
+   "gap": 0.45,
+   "slot": "The total, said once, clearly.",
+   "text": "[clear, full voice] So for this shift, Sam earned *one hundred fifty-three dollars*."
+  },
+  {
+   "id": "L07",
+   "voice": "narrator",
+   "after": "L06",
+   "gap": 0.5,
+   "slot": "Proof: the same numbers on the real screen of the app, named in the order they appear.",
+   "text": "[explaining] And the app shows the same numbers: the share, the tips, the withholding and the total."
+  },
+  {
+   "id": "L08",
+   "voice": "narrator",
+   "after": "L07",
+   "gap": 0.7,
+   "slot": "Brand close: your name and your one short line, spoken over the end card.",
+   "text": "[upbeat, not over the top] *Your Brand*. One short line."
+  }
+ ],
+ "music": {
+  "style": "tutorial",
+  "bpm": 100,
+  "key": "F",
+  "scale": "major",
+  "level": -22,
+  "duck": -6,
+  "sections": [
+   {
+    "at": 0,
+    "mood": "intro"
+   },
+   {
+    "at": "L02",
+    "mood": "main"
+   },
+   {
+    "at": "L06",
+    "mood": "lift"
+   },
+   {
+    "at": "L08",
+    "mood": "outro"
+   }
+  ]
+ }
+}

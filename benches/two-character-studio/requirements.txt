@@ -1,0 +1,6 @@
+# Python needs of the two-character studio tools (on top of core/requirements.txt)
+numpy>=1.26
+pillow>=10.0
+# Optional: the per-line intelligibility check in tools/qa.py and word timings in tools/align_takes.py.
+# Uncomment it, or install it on its own: .venv/bin/pip install faster-whisper
+# faster-whisper>=1.0

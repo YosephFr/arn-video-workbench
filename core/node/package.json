@@ -1,0 +1,11 @@
+{
+  "name": "workbench-core-node",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Shared Node helpers for the video workbench: deterministic HTML frame capture.",
+  "license": "MIT",
+  "dependencies": {
+    "playwright": "1.63.0"
+  }
+}

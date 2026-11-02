@@ -1,0 +1,50 @@
+{
+  "title": "Sample: the mascot handles it",
+  "note": "An empty guiding sample. Each line's `note` says what that slot is for; replace the text and keep the structure. Any language works: the voice provider decides the accent.",
+  "format": { "width": 1080, "height": 1920, "fps": 30 },
+  "language": "en",
+  "tail": 3.6,
+  "voices": {
+    "narrator": { "provider": "auto", "voice": "${WB_VOICE_NARRATOR}", "model": "eleven_multilingual_v2", "speed": 1.0 },
+    "guest": { "provider": "auto", "voice": "${WB_VOICE_GUEST}", "model": "eleven_multilingual_v2", "speed": 1.0 }
+  },
+  "lines": [
+    {
+      "id": "L01", "voice": "narrator", "start": 0.4,
+      "text": "[warm, a little tired] Here is the *problem*, in one short line.",
+      "note": "Hook: the everyday problem in one sentence, in the viewer's words. The first frame already shows it."
+    },
+    {
+      "id": "L02", "voice": "guest", "after": "L01", "gap": 0.25, "effect": "phone",
+      "text": "[small, hopeful] Hello? Anyone *there*?",
+      "note": "The problem talks: a message, a customer or an object waiting, voiced as a character."
+    },
+    {
+      "id": "L03", "voice": "narrator", "after": "L02", "gap": 0.3,
+      "text": "Then your *helper* drops in and handles it.",
+      "note": "Turn: the mascot arrives. Say what it does, not what it is."
+    },
+    {
+      "id": "L04", "voice": "narrator", "after": "L03", "gap": 0.2,
+      "text": "Every grey thing it touches turns *your* colour.",
+      "note": "Payoff: one beat per thing it handles; each one turns the accent colour."
+    },
+    {
+      "id": "L05", "voice": "narrator", "after": "L04", "gap": 0.35,
+      "text": "[warm] Close on one *promise*. Then say your name.",
+      "note": "Close: one promise, then the end card says the name. No price or number you cannot prove."
+    }
+  ],
+  "music": {
+    "provider": "procedural",
+    "style": "playful",
+    "bpm": 108,
+    "key": "C",
+    "sections": [
+      { "at": 0, "mood": "intro" },
+      { "at": "L03", "mood": "build" },
+      { "at": "L04", "mood": "main" },
+      { "at": "L05", "mood": "outro" }
+    ]
+  }
+}

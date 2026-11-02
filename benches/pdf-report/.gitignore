@@ -1,0 +1,7 @@
+# Generated or downloaded: rebuilt by the commands in README.md
+.venv/
+node_modules/
+assets/fonts/
+brand/logo.png
+samples/*/renders/
+__pycache__/

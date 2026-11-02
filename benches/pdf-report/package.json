@@ -1,0 +1,17 @@
+{
+  "name": "pdf-report",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "description": "Branded executive PDF report (A4, 2-4 pages) generated in code with ReportLab, with a layout check and a text read-back. Node is only used to render the logo with headless Chromium.",
+  "license": "MIT",
+  "engines": { "node": ">=20" },
+  "scripts": {
+    "logo": "node engine/render.mjs samples/decision-report logo",
+    "pdf": "node engine/render.mjs samples/decision-report pdf",
+    "poster": "node engine/render.mjs samples/decision-report poster --out docs/poster.png"
+  },
+  "dependencies": {
+    "playwright": "1.63.0"
+  }
+}

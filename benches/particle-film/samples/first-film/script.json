@@ -1,0 +1,100 @@
+{
+  "title": "First film (guiding sample)",
+  "format": {
+    "width": 1080,
+    "height": 1920,
+    "fps": 60
+  },
+  "language": "en",
+  "tail": 4.4,
+  "voices": {
+    "narrator": {
+      "provider": "auto",
+      "voice": "${WB_VOICE_NARRATOR}",
+      "model": "eleven_multilingual_v2",
+      "speed": 1.0
+    },
+    "customer": {
+      "provider": "auto",
+      "voice": "${WB_VOICE_CUSTOMER}",
+      "model": "eleven_multilingual_v2",
+      "speed": 1.05
+    },
+    "owner": {
+      "provider": "auto",
+      "voice": "${WB_VOICE_OWNER}",
+      "model": "eleven_multilingual_v2",
+      "speed": 1.0
+    }
+  },
+  "lines": [
+    {
+      "id": "L01",
+      "voice": "narrator",
+      "text": "[curious, warm] Hook: the problem your viewer has, in *one* short sentence.",
+      "start": 0.5
+    },
+    {
+      "id": "L02",
+      "voice": "customer",
+      "text": "[impatient] Customer: the question they keep asking, in their own words?",
+      "after": "L01",
+      "gap": 0.35,
+      "effect": "voice-note"
+    },
+    {
+      "id": "L03",
+      "voice": "narrator",
+      "text": "[matter-of-fact] The cost: what that wait loses, as one *concrete* image.",
+      "after": "L02",
+      "gap": 0.4
+    },
+    {
+      "id": "L04",
+      "voice": "owner",
+      "text": "[relieved, smiling] Owner: how the day feels once it is solved.",
+      "after": "L03",
+      "gap": 0.45
+    },
+    {
+      "id": "L05",
+      "voice": "narrator",
+      "text": "[warm, confident] The promise, in one line. Then the brand name: *Acme*.",
+      "after": "L04",
+      "gap": 0.5
+    }
+  ],
+  "keep_pauses": [
+    {
+      "line": "L05",
+      "after_word": 5,
+      "max": 0.3
+    }
+  ],
+  "music": {
+    "provider": "procedural",
+    "style": "tension",
+    "bpm": 92,
+    "key": "D",
+    "scale": "minor",
+    "level": -20,
+    "sections": [
+      {
+        "at": 0,
+        "mood": "intro"
+      },
+      {
+        "at": "L02",
+        "mood": "build"
+      },
+      {
+        "at": "L04",
+        "mood": "break"
+      },
+      {
+        "at": "L05",
+        "mood": "lift"
+      }
+    ]
+  }
+}

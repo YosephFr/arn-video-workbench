@@ -1,0 +1,25 @@
+{
+  "name": "onboarding",
+  "url": "${ROOT}/benches/app-tutorial/samples/mock-app/index.html",
+  "mode": "browser",
+  "clock": "2026-03-06T08:00:00Z",
+  "timezone": "UTC",
+  "locale": "en-US",
+  "fonts": "${ROOT}/assets/fonts",
+  "steps": [
+    { "goto": "#welcome" },
+    { "capture": "welcome", "measure": { "name": "#name", "email": "#email", "create": "#create" } },
+    { "type": "#name", "text": "Alex", "every": 1, "capture": "name", "measure": { "name": "#name", "email": "#email", "create": "#create" } },
+    { "type": "#email", "text": "alex@acme.example", "every": 3, "capture": "email", "measure": { "email": "#email", "create": "#create" } },
+    { "press": "#create", "capture": "create-pressed", "measure": { "create": "#create" } },
+    { "capture": "business-empty", "measure": { "business": "#business", "next": "#next-1" } },
+    { "type": "#business", "text": "Acme Café", "every": 2, "capture": "business", "measure": { "business": "#business", "next": "#next-1" } },
+    { "press": "#next-1", "capture": "business-pressed", "measure": { "next": "#next-1" } },
+    { "capture": "days", "measure": { "days": ".days", "next": "#next-2" } },
+    { "tap": "text=Sat", "capture": "days-saturday", "measure": { "days": ".days", "next": "#next-2" } },
+    { "press": "#next-2", "capture": "days-pressed", "measure": { "next": "#next-2" } },
+    { "capture": "ready", "measure": { "summary": ".summary", "go": "#go-today" } },
+    { "press": "#go-today", "capture": "ready-pressed", "measure": { "go": "#go-today" } },
+    { "capture": "home", "measure": { "next": ".list", "tiles": ".tiles" } }
+  ]
+}

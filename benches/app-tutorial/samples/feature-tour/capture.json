@@ -1,0 +1,23 @@
+{
+  "name": "reminders",
+  "url": "${BENCH}/samples/mock-app/index.html",
+  "mode": "app",
+  "clock": "2026-03-06T09:41:00Z",
+  "timezone": "UTC",
+  "locale": "en-US",
+  "fonts": "${ROOT}/assets/fonts",
+  "steps": [
+    { "goto": "#home" },
+    { "capture": "home", "measure": { "settings": "#tab-settings", "next": ".list" } },
+    { "press": "#tab-settings", "capture": "home-pressed", "measure": { "settings": "#tab-settings" } },
+    { "capture": "settings", "measure": { "reminders": "[data-go=reminders]" } },
+    { "press": "[data-go=reminders]", "capture": "settings-pressed", "measure": { "reminders": "[data-go=reminders]" } },
+    { "capture": "reminders", "measure": { "switch": "#switch", "when": ".chips", "preview": "#preview", "save": "#save" } },
+    { "tap": "#switch", "capture": "switch-on", "measure": { "switch": "#switch", "when": ".chips", "preview": "#preview", "save": "#save" } },
+    { "tap": "text=1 hour before", "capture": "one-hour", "measure": { "when": ".chips", "preview": "#preview", "save": "#save" } },
+    { "press": "#save", "capture": "save-pressed", "measure": { "save": "#save" } },
+    { "capture": "saved", "measure": { "saved": "#saved", "save": "#save", "preview": "#preview" } },
+    { "goto": "#settings" },
+    { "capture": "settings-on", "measure": { "reminders": "[data-go=reminders]" } }
+  ]
+}

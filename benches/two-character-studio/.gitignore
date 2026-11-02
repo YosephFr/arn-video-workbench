@@ -1,0 +1,8 @@
+node_modules/
+samples/*/voice/
+samples/*/audio/
+samples/*/renders/
+samples/*/timeline.json
+samples/*/plan.json
+samples/*/events.json
+__pycache__/
