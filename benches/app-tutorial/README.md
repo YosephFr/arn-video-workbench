@@ -83,16 +83,18 @@ node benches/app-tutorial/engine/render.mjs benches/app-tutorial/samples/feature
 A new tutorial:
 
 1. **Start a piece.** `core/bin/wb new app-tutorial my-feature` copies the sample to `work/app-tutorial/my-feature`.
-2. **Capture your app with demo data.** Write the flow in `capture.json` (below) and run `node benches/app-tutorial/tools/capture.mjs --flow work/app-tutorial/my-feature/capture.json`. One screen at a time also works: `node benches/app-tutorial/tools/capture.mjs --url http://localhost:5173/settings --name settings --out work/app-tutorial/my-feature/captures/app --measure save=#save`.
+2. **Capture your app with demo data.** Write the flow in `capture.json` (below) and run `node benches/app-tutorial/tools/capture.mjs --flow work/app-tutorial/my-feature/capture.json`. On a machine with a heavy-job queue, run it through the queue: `pesado -- node benches/app-tutorial/tools/capture.mjs --flow work/app-tutorial/my-feature/capture.json`. One screen at a time also works: `node benches/app-tutorial/tools/capture.mjs --url http://localhost:5173/settings --name settings --out work/app-tutorial/my-feature/captures/app --measure save=#save`.
 3. **Write the script** in `script.json`, one step per line, then `python3 benches/app-tutorial/tools/lint_script.py work/app-tutorial/my-feature`.
 4. **Voice and timeline.** `core/bin/wb voice <piece> --takes 2`, listen, keep the best take of each line in `voice/selection.json`, then `core/bin/wb timeline <piece>`. With `WB_TTS_PROVIDER=silent` you can block out the whole film before recording.
 5. **Film.** Edit `film.js`, then `node benches/app-tutorial/engine/render.mjs <piece> check --social` and stills: `... still 2,6,10`, `WB_GUIDES=social ... still 6`, and `... review` (one still per screen, ring and tap, listed in `renders/review/moments.txt`). Look at them one by one, in order.
 6. **Audio.** `core/bin/wb music <piece>`, `node benches/app-tutorial/engine/render.mjs <piece> events` (taps, transitions and the end card become `events.json`), `core/bin/wb sfx <piece>`, `core/bin/wb mix <piece>`.
 7. **Preview with sound.** `... preview`, watched whole at phone size.
-8. **Final and checks.** `... final`, then `core/bin/wb verify <piece>/renders/final.mp4`.
+8. **Final and checks.** `... final`, then `core/bin/wb verify <piece>/renders/final.mp4`. On a machine with a heavy-job queue, both renders go through it: `pesado -- node benches/app-tutorial/engine/render.mjs <piece> final`.
 9. **Grid cover.** `WB_COVER='Title|Subtitle' node benches/app-tutorial/engine/render.mjs <piece> still 6 --scale 1` writes a frame with a title band inside the 3:4 crop profiles show.
 
 `preview` and `final` run on one worker with two encoder threads; `--workers N` and `--threads N` (or `WB_RENDER_WORKERS` and `WB_RENDER_THREADS`) raise them when the machine has the memory, since every worker decodes all the captures of the film.
+
+`pesado` is the heavy-job queue of the server these pieces are made on: `pesado -- <command>` waits for its turn, runs the command with `nice` inside a systemd slice with a shared memory budget, and a job that exceeds the budget ends alone with exit code 137. `pesado --estado` shows what is running. A capture run (a headless browser) and a render are both heavy jobs; stills and `check` are not. Where there is no such queue, run the commands as they are and look at the free memory first.
 
 All render modes: `still t1,t2` · `sheet a:b:step` · `preview [--to 8] [--silent]` · `final` · `poster t` (540 × 960, ≤ 400 KB) · `events` · `check [--social]` (also lists every missing capture and the command that makes it) · `review` · `info`.
 
@@ -132,6 +134,8 @@ module.exports = ({ W, L, focus }) => {
 **Elements** are found in the capture's measured rectangles: `'Save'` (by text: exact, then prefix, then contains; buttons and cards before loose text), `'@save'` (the element measured with the selector named `save`), `{ q: 'Total', text: true }` (prefer loose text), `{ q: 'Riley', box: true }` (the smallest card that contains the text), `{ q: 'Edit', n: 1 }` (the second match from the top), or `{ x, y, w, h }` in device px.
 
 ## Captures
+
+Run a flow with `node benches/app-tutorial/tools/capture.mjs --flow <piece>/capture.json`, through the heavy-job queue where the machine has one (`pesado -- node benches/app-tutorial/tools/capture.mjs --flow <piece>/capture.json`). The tool closes its browser when the flow ends; a capture script of your own must do the same.
 
 `tools/capture.mjs` opens your app in headless Chromium (a throwaway profile, never a visible window) as a 393 × 852 phone at 3× (`mode: "app"`, with 59/34 px safe areas) or a 393 × 710 web page (`mode: "browser"`: the film draws the status and address bars). For each screen it writes `NN-name.png` and `NN-name.json`.
 
