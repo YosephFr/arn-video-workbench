@@ -221,6 +221,15 @@ function defineTutorial(pieceDir, build, ext = {}) {
         const dirn = s.trans === 'push' ? 1 : -1;
         ctx.save(); ctx.translate(-dirn * dev.w * 0.3 * e, 0); drawScreen(ctx, prev, t, devOf(prev)); ctx.fillStyle = `rgba(0,0,0,${0.12 * e})`; ctx.fillRect(0, 0, dev.w, dev.h); ctx.restore();
         ctx.save(); ctx.translate(dirn * dev.w * (1 - e), 0); ctx.shadowColor = 'rgba(0,0,0,0.18)'; ctx.shadowBlur = 20; ctx.fillStyle = SCREEN_BG; ctx.fillRect(0, 0, dev.w, dev.h); ctx.shadowColor = 'transparent'; drawScreen(ctx, s, t, dev); ctx.restore();
+      } else if ((s.trans === 'sheet' || s.trans === 'unsheet') && (s.trans === 'sheet' ? s : prev).sheetTop != null) {
+        // With `sheetTop` (where the sheet starts on the capture, in its px) only the sheet moves: the screen behind
+        // blurs and dims into the capture's own backdrop instead of sliding with the sheet.
+        const up = s.trans === 'sheet'; const sh = up ? s : prev, under = up ? prev : s; const k = up ? e : 1 - e;
+        const top = (sh.mode === 'browser' ? D.BROWSER_TOP * dev.w / 393 : 0) + sh.sheetTop, r = sh.sheetRadius ?? 24;
+        ctx.save(); ctx.filter = `blur(${(6 * k).toFixed(2)}px)`; drawScreen(ctx, under, t, devOf(under)); ctx.restore();
+        ctx.fillStyle = `rgba(0,0,0,${0.3 * k})`; ctx.fillRect(0, 0, dev.w, dev.h);
+        ctx.save(); ctx.globalAlpha = k; ctx.beginPath(); ctx.rect(0, 0, dev.w, top); ctx.clip(); drawScreen(ctx, sh, t, devOf(sh)); ctx.restore();
+        ctx.save(); ctx.translate(0, dev.h * (1 - k)); ctx.beginPath(); ctx.roundRect(0, top, dev.w, dev.h - top + 2, [r, r, 0, 0]); ctx.clip(); drawScreen(ctx, sh, t, devOf(sh)); ctx.restore();
       } else if (s.trans === 'sheet') {   // a sheet rises from the bottom over a dimmed screen
         drawScreen(ctx, prev, t, devOf(prev)); ctx.fillStyle = `rgba(0,0,0,${0.3 * e})`; ctx.fillRect(0, 0, dev.w, dev.h);
         ctx.save(); ctx.translate(0, dev.h * (1 - e)); drawScreen(ctx, s, t, dev); ctx.restore();
@@ -228,6 +237,15 @@ function defineTutorial(pieceDir, build, ext = {}) {
         drawScreen(ctx, s, t, dev); ctx.fillStyle = `rgba(0,0,0,${0.3 * (1 - e)})`; ctx.fillRect(0, 0, dev.w, dev.h);
         ctx.save(); ctx.translate(0, dev.h * e); drawScreen(ctx, prev, t, devOf(prev)); ctx.restore();
       } else { drawScreen(ctx, prev, t, devOf(prev)); ctx.globalAlpha = e; drawScreen(ctx, s, t, dev); ctx.globalAlpha = 1; }   // fade
+      // A page of the same web app changes under the browser's own chrome: the status strip and the address bar stay put
+      // while a page slides or a `sheetTop` sheet rises. Only between two captures painted with that chrome (a drawn or
+      // a fixed-scroll shot paints its own).
+      const chrome = (x) => x.mode === 'browser' && !x.draw && !x.fixed;
+      const sheet = (s.trans === 'sheet' ? s : s.trans === 'unsheet' ? prev : {}).sheetTop != null;
+      if ((s.trans === 'push' || s.trans === 'back' || sheet) && chrome(s) && chrome(prev)) {
+        const y0 = D.BROWSER_TOP * dev.w / 393; ctx.fillStyle = s.top || '#f8f8f7'; ctx.fillRect(0, 0, dev.w, y0);
+        D.browserBar(ctx, dev.w, dev.h, s.url || brand.url, { bg: s.barBg, font });
+      }
     } else drawScreen(ctx, s, t, dev);
     const dark = !!s.dark; const time = s.time || cfg.time;
     if (s.mode !== 'browser' && s.statusBg) { ctx.fillStyle = s.statusBg; ctx.fillRect(0, 0, dev.w, D.BROWSER_TOP); }
@@ -362,10 +380,14 @@ function defineTutorial(pieceDir, build, ext = {}) {
   let BAND = null;
   function band(f, t) {
     if (cfg.captions === false || cfg.band === false) return;
-    const i = shotAt(t); if (i < 0) return; const dev = devOf(shots[i]); const G = geom(t, dev); if (G.alpha <= 0.01) return;
     const capY = (cfg.captions && cfg.captions.y) || 372, capSize = (cfg.captions && cfg.captions.size) || 54;
     const solid = Math.round(capY + capSize * 1.22 + 16), H = solid + 70;
-    const top = toFrame(G, dev, dev.w / 2, 0)[1]; const k = clamp((H - top) / 90) * G.alpha; if (k <= 0) return;
+    let k = 0;
+    const i = shotAt(t);
+    if (i >= 0) { const dev = devOf(shots[i]); const G = geom(t, dev); if (G.alpha > 0.01) k = clamp((H - toFrame(G, dev, dev.w / 2, 0)[1]) / 90) * G.alpha; }
+    // other devices drawn by the film (a tablet, a TV) report their top edge with topAt(t) → { top, alpha }
+    for (const o of over) if (o.topAt && t >= o.at && t < o.to) { const r = o.topAt(t); if (r) k = Math.max(k, clamp((H - r.top) / 90) * r.alpha); }
+    if (k <= 0) return;
     if (!BAND) {
       BAND = createCanvas(Math.round(1080 * f.s), Math.round(H * f.s)); const c = BAND.getContext('2d'); c.scale(f.s, f.s); background(c);
       c.setTransform(1, 0, 0, 1, 0, 0); c.globalCompositeOperation = 'destination-in'; const g = c.createLinearGradient(0, 0, 0, BAND.height);

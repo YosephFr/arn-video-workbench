@@ -31,7 +31,7 @@ This bench also holds the **tutorial kit** (`engine/kit/`) and the **capture too
 | Phone | Centred, top at y 548, screen 556 px wide (a 393-px-wide device at 1.415×). Body, side buttons, camera island, status bar and home indicator are drawn in code; the screen is a 3× capture. `frame: 'android'` gives a punch-hole phone. `mode: 'browser'` adds a compact address bar for web apps. |
 | Camera | `focus(capture, element, { t, until, z })` brings a measured element to (540, 900) and zooms around it. z 1.3–1.6 keeps app text readable on a phone; the kit caps it so the element fits between the platforms' buttons. Moves take 0.35–0.6 s (in-out cubic). Push in on the word, hold, come back. |
 | Rest | While the camera rests, the phone drifts in by 0.4% a second (3% at most); the next move takes the drift back out. A frame that does not move for a second reads as stopped. |
-| Transitions | `push` a new page, `back` returning, `sheet` and `unsheet` for bottom sheets, `fade` for a tab switch, `cut` for a new state of the same screen (pressed, typed, toggled). Use the transition the app itself plays. |
+| Transitions | `push` a new page, `back` returning, `sheet` and `unsheet` for bottom sheets, `fade` for a tab switch, `cut` for a new state of the same screen (pressed, typed, toggled). Use the transition the app itself plays. Between two captures of a web app (`mode: 'browser'`) only the page slides on `push` and `back`: the status strip and the address bar stay in place. |
 | Tap | A soft disc presses in 0.4 s before the tap and a ripple spreads after it. It fades with the transition it causes and, after a cut, follows the same button. Tap on the action word. |
 | Ring | Draws itself around the element in 0.45 s, accent colour, 5 px, with the element's own radius. `kind: 'spot'` dims the rest of the screen instead. |
 | Loupe | Lifts an element's pixels into a larger card when you need the detail without leaving the full screen. |
@@ -115,13 +115,13 @@ module.exports = ({ W, L, focus }) => {
 
 | Key | What it is |
 |---|---|
-| `shots` | What the phone shows, from `at` on: `cap` (a capture id), or `seq` (a typing or animation sequence, `dt` seconds per frame), or `draw(c, t, w, h, api)` (a screen drawn in device px). Options: `trans` (`none`, `cut`, `push`, `back`, `sheet`, `unsheet`, `fade`), `dur`, `chip`, `mode: 'browser'` + `url`, `frame: 'android'`, `dark` (white status bar), `time`, `mask: [{ x, y, w, h, color }]` (cover a line with the page colour), `scroll: [{ t, y }]` with `fixed: [header, bottom]` and `until` (a page that scrolls under its fixed bars), `paint(c, t, dev)`. |
+| `shots` | What the phone shows, from `at` on: `cap` (a capture id), or `seq` (a typing or animation sequence, `dt` seconds per frame), or `draw(c, t, w, h, api)` (a screen drawn in device px). Options: `trans` (`none`, `cut`, `push`, `back`, `sheet`, `unsheet`, `fade`), `dur`, `sheetTop` (where the sheet starts on its capture, in capture px: only the sheet rises, and the screen behind blurs and dims into the capture's own backdrop; `sheetRadius` defaults to 24), `chip`, `mode: 'browser'` + `url`, `frame: 'android'`, `dark` (white status bar), `time`, `mask: [{ x, y, w, h, color }]` (cover a line with the page colour), `scroll: [{ t, y }]` with `fixed: [header, bottom]` and `until` (a page that scrolls under its fixed bars), `paint(c, t, dev)`. |
 | `phone` | Camera keys `{ t, cx, top, sw, alpha, z, fx, fy, tx, ty, dur }`. A key arrives at `t`, moving during `dur`. `focus()` builds them from an element; `fx, fy` aim at device px directly (drawn screens). |
 | `marks` | Rings `{ at, to, el, shot, kind, pad, r, color, width }`, `kind` being `'ring'` or `'spot'`. |
 | `taps` | `{ at, el, shot, dx, dy, sound, gain }`. |
 | `loupes` | `{ at, to, el, shot, zoom, x, y, pad }`. |
 | `labels` | `{ at, to, text, el, side, x, y }`, `side` being `'above'` or `'below'`. |
-| `over` | `{ at, to, draw(u), under, top }`: anything drawn outside the phone (`under` behind it, `top` above the captions). |
+| `over` | `{ at, to, draw(u), under, top, topAt }`: anything drawn outside the phone (`under` behind it, `top` above the captions). A device drawn here (a tablet, a TV) returns its top edge from `topAt(t)` as `{ top, alpha }` in frame px, so the caption band also covers it when a zoom brings it under the captions. |
 | `captions` | `{ y, size, maxWords, style, skip, replace, icons }` (`style` is `'band'` or `'pill'`) or `false`. `icons` puts an image before a word: logos you are licensed to show. |
 | `card` | End card `{ lock, line, url }`, or `false`. `lock` is when the lockup completes (default: 1.45 s after the last word; put it 0.9 s into the brand line so the line is spoken over the card). |
 | `events` | Extra effects `{ t, name, gain_db }` for `events.json`. |
