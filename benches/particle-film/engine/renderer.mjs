@@ -6,7 +6,7 @@
 //   node <bench>/engine/render.mjs <piece> final                 full-res master at the script's fps
 //   node <bench>/engine/render.mjs <piece> poster [t] [--out f]  540 × 960 PNG of one frame
 //   node <bench>/engine/render.mjs <piece> events                film sound events → <piece>/events.json
-// Options: --scale s  --fps n  --workers n  --from s  --to s  --crf n  --audio file  --out file
+// Options: --scale s  --fps n  --workers n (default 1)  --threads n (encoder, default 2)  --from s  --to s  --crf n  --audio file  --out file
 // Switches: WB_ACTS=hook,cost renders only those acts (particle-film); WB_CAPTIONS=0 hides the captions.
 //
 // Rendering is deterministic: frame N shows exactly time N / fps, so frames can be rendered in any order by
@@ -15,7 +15,6 @@
 
 import fs from 'node:fs';
 import path from 'node:path';
-import os from 'node:os';
 import { spawn, fork } from 'node:child_process';
 import { createRequire } from 'node:module';
 import { fileURLToPath } from 'node:url';
@@ -137,7 +136,7 @@ async function chunkWorker(opt) {
   const fmt = format(pieceDir);
   const film = loadFilm(pieceDir);
   const frame = await makeFrame(film, { ...fmt, scale, fps });
-  const x264 = ['-c:v', 'libx264', '-preset', opt.preset || 'medium', '-crf', String(opt.crf || 18), ...(opt.maxrate ? ['-maxrate', String(opt.maxrate), '-bufsize', String(opt.bufsize || `${parseFloat(opt.maxrate) * 2}M`)] : []),
+  const x264 = ['-c:v', 'libx264', '-threads', String(Math.max(1, parseInt(process.env.WB_RENDER_THREADS || '2', 10) || 2)), '-preset', opt.preset || 'medium', '-crf', String(opt.crf || 18), ...(opt.maxrate ? ['-maxrate', String(opt.maxrate), '-bufsize', String(opt.bufsize || `${parseFloat(opt.maxrate) * 2}M`)] : []),
     '-pix_fmt', 'yuv420p', '-profile:v', 'high', '-x264-params', `keyint=${Math.round(fps * 2)}:min-keyint=1:colorprim=bt709:transfer=bt709:colormatrix=bt709`, '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709'];
   const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgba', '-s', `${frame.PW}x${frame.PH}`, '-r', String(fps), '-i', '-', ...x264, opt.chunk], { stdio: ['pipe', 'inherit', 'inherit'] });
   const write = (buf) => new Promise((res) => { if (!ff.stdin.write(buf)) ff.stdin.once('drain', res); else res(); });
@@ -158,7 +157,10 @@ async function video(pieceDir, film, fmt, mode, opt, bench) {
   const scale = parseFloat(opt.scale || (preview ? 0.5 : 1));
   const from = parseFloat(opt.from || '0'); const to = parseFloat(opt.to || String(film.duration));
   const F0 = Math.round(from * fps), F1 = Math.round(to * fps); const total = F1 - F0;
-  const workers = Math.max(1, Math.min(total, parseInt(opt.workers || String(d.workers || Math.max(1, Math.min(8, os.cpus().length - 2))), 10)));
+  // One worker and two encoder threads unless asked for more (--workers, --threads, WB_RENDER_WORKERS, WB_RENDER_THREADS):
+  // every worker holds the film in memory and runs its own encoder, which a shared machine may not have room for.
+  if (opt.threads && opt.threads !== true) process.env.WB_RENDER_THREADS = String(opt.threads);
+  const workers = Math.max(1, Math.min(total, parseInt(opt.workers || process.env.WB_RENDER_WORKERS || String(d.workers || 1), 10) || 1));
   const out = path.resolve(opt.out || path.join(pieceDir, 'renders', `${mode}.mp4`));
   fs.mkdirSync(path.dirname(out), { recursive: true });
   const tmp = path.join(path.dirname(out), `.chunks-${path.basename(out, '.mp4')}`);

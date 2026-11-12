@@ -9,11 +9,10 @@
 //   node engine/render.mjs <piece> poster 12.5        renders/poster.png, 540 × 960 (--out file, --scale)
 //   node engine/render.mjs <piece> stage              renders/stage.html only (drive it with core/node/frames.mjs)
 //
-// Options: --from s --to s (preview/final/overlaps), --fps N, --workers N, --crf N, --silent (no audio),
+// Options: --from s --to s (preview/final/overlaps), --fps N, --workers N (default 1), --threads N (encoder, default 2), --crf N, --silent (no audio),
 //          --out file, --step 0.2 and --min 120 (overlaps: seconds between checks, pixels that count as covering).
 // Frame N always shows time N / fps. Without timeline.json the timing is estimated from script.json.
 import fs from 'node:fs'
-import os from 'node:os'
 import path from 'node:path'
 import { loadPiece, bakeStage } from './lib/piece.mjs'
 import { launch, openStage, shot, renderVideo } from './lib/capture.mjs'
@@ -69,7 +68,9 @@ try {
     const mix = fs.existsSync(mixFile) && !flag('silent') ? mixFile : null
     const out = path.resolve(opt('out', path.join(renders, mode + '.mp4')))
     fs.mkdirSync(path.dirname(out), { recursive: true })
-    const workers = Number(opt('workers', Math.min(6, Math.max(2, Math.floor(os.cpus().length / 2)))))
+    // one page and two encoder threads unless asked for more: every page is a browser renderer of its own
+    if (opt('threads')) process.env.WB_RENDER_THREADS = String(opt('threads'))
+    const workers = Math.max(1, Number(opt('workers', process.env.WB_RENDER_WORKERS || 1)) || 1)
     const r = await renderVideo(browser, stageFile, P, { scale: final ? 1 : 0.5, fps, t0, t1, out, final, crf: opt('crf'), workers, mix })
     console.log(`${out} · ${r.frames} frames in ${r.seconds.toFixed(0)} s · ${r.workers} workers${mix ? ' · with audio/mix.wav' : ' · silent'}`)
   } else {

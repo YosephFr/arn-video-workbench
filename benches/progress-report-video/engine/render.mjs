@@ -6,12 +6,11 @@
 //   node engine/render.mjs <piece> sheet 0:40:2 [--scale 0.2] [--cols 8]   (overview only: a sheet hides jumps)
 //   node engine/render.mjs <piece> events                   write <piece>/events.json (sound effects on the picture)
 //   node engine/render.mjs <piece> preview [--from S --to S] [--silent]    half size, 30 fps, with audio/mix.wav if present
-//   node engine/render.mjs <piece> final [--workers N]      full size at script.format.fps, with audio/mix.wav
+//   node engine/render.mjs <piece> final [--workers N] [--threads N]   full size at script.format.fps, with audio/mix.wav (one worker, two encoder threads by default)
 //   node engine/render.mjs <piece> poster [--at S] [--out FILE]            540 px wide PNG, <piece>/renders/poster.png
 //
 // Workers render disjoint frame ranges into H.264 chunks that are joined losslessly, then muxed with the mix.
 import { existsSync, mkdirSync, rmSync, statSync, writeFileSync } from 'node:fs'
-import { cpus } from 'node:os'
 import { basename, dirname, join, resolve } from 'node:path'
 import { fileURLToPath } from 'node:url'
 import { fork, spawn, spawnSync } from 'node:child_process'
@@ -114,7 +113,7 @@ async function worker(a) {
   const scale = parseFloat(a.scale), fps = parseFloat(a.fps), f0 = parseInt(a.f0, 10), f1 = parseInt(a.f1, 10)
   const fr = new Frame({ width: film.W, height: film.H, scale, fps })
   const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgba', '-s', `${fr.PW}x${fr.PH}`, '-r', String(fps), '-i', '-',
-    '-c:v', 'libx264', '-preset', a.preset || 'medium', '-crf', String(a.crf || 18), '-pix_fmt', 'yuv420p', '-profile:v', 'high',
+    '-c:v', 'libx264', '-threads', String(Math.max(1, parseInt(process.env.WB_RENDER_THREADS || '2', 10) || 2)), '-preset', a.preset || 'medium', '-crf', String(a.crf || 18), '-pix_fmt', 'yuv420p', '-profile:v', 'high',
     '-x264-params', 'keyint=120:min-keyint=1:colorprim=bt709:transfer=bt709:colormatrix=bt709', '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', a.chunk], { stdio: ['pipe', 'inherit', 'inherit'] })
   const write = (buf) => new Promise((res) => { if (!ff.stdin.write(buf)) ff.stdin.once('drain', res); else res() })
   for (let f = f0; f < f1; f++) {
@@ -133,7 +132,10 @@ async function video(piece, a, mode) {
   const scale = parseFloat(a.scale || (final ? '1' : '0.5'))
   const from = parseFloat(a.from || '0'), to = Math.min(film.duration, parseFloat(a.to || String(film.duration)))
   const F0 = Math.round(from * fps), F1 = Math.round(to * fps), total = F1 - F0
-  const workers = Math.max(1, Math.min(parseInt(a.workers || String(Math.max(1, cpus().length - 2)), 10), Math.ceil(total / 30)))
+  // One worker and two encoder threads unless asked for more (--workers, --threads, WB_RENDER_WORKERS, WB_RENDER_THREADS):
+  // every worker holds the film in memory and runs its own encoder, which a shared machine may not have room for.
+  if (a.threads && a.threads !== true) process.env.WB_RENDER_THREADS = String(a.threads)
+  const workers = Math.max(1, Math.min(parseInt(a.workers || process.env.WB_RENDER_WORKERS || '1', 10) || 1, Math.ceil(total / 30)))
   const mix = join(dir, 'audio', 'mix.wav')
   const audio = !a.silent && existsSync(mix)
   if (final && !audio && !a.silent) throw new Error(`${mix} is missing: run the audio steps (see README) or pass --silent`)

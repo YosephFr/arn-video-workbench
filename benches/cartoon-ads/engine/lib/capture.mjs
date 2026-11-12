@@ -51,7 +51,7 @@ export async function shot(stage, t, { type = 'png', quality = 92 } = {}) {
 export function encoder(file, fps, { final = false, crf } = {}) {
   return spawn('ffmpeg', ['-y', '-loglevel', 'error', '-f', 'image2pipe', '-framerate', String(fps), '-i', '-',
     '-vf', 'scale=out_color_matrix=bt709:out_range=tv:flags=accurate_rnd+full_chroma_int,format=yuv420p',
-    '-c:v', 'libx264', '-preset', final ? 'slow' : 'veryfast', '-crf', String(crf ?? (final ? 17 : 23)), '-profile:v', 'high', '-g', String(fps * 2),
+    '-c:v', 'libx264', '-threads', String(Math.max(1, parseInt(process.env.WB_RENDER_THREADS || '2', 10) || 2)), '-preset', final ? 'slow' : 'veryfast', '-crf', String(crf ?? (final ? 17 : 23)), '-profile:v', 'high', '-g', String(fps * 2),
     ...(final ? ['-maxrate', '9M', '-bufsize', '18M'] : []),
     '-x264-params', 'colorprim=bt709:transfer=bt709:colormatrix=bt709:fullrange=off',
     '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', '-color_range', 'tv', file], { stdio: ['pipe', 'inherit', 'inherit'] })

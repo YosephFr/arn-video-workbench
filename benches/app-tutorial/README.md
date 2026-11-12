@@ -92,6 +92,8 @@ A new tutorial:
 8. **Final and checks.** `... final`, then `core/bin/wb verify <piece>/renders/final.mp4`.
 9. **Grid cover.** `WB_COVER='Title|Subtitle' node benches/app-tutorial/engine/render.mjs <piece> still 6 --scale 1` writes a frame with a title band inside the 3:4 crop profiles show.
 
+`preview` and `final` run on one worker with two encoder threads; `--workers N` and `--threads N` (or `WB_RENDER_WORKERS` and `WB_RENDER_THREADS`) raise them when the machine has the memory, since every worker decodes all the captures of the film.
+
 All render modes: `still t1,t2` · `sheet a:b:step` · `preview [--to 8] [--silent]` · `final` · `poster t` (540 × 960, ≤ 400 KB) · `events` · `check [--social]` (also lists every missing capture and the command that makes it) · `review` · `info`.
 
 ## film.js

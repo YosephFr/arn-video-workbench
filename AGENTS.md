@@ -39,5 +39,6 @@ You are recreating a video style with your user's own content and brand. Work li
 
 - Rendering is headless. Never open a visible browser for a render or a capture.
 - Check free disk space before long renders. Delete the frame folders and intermediates you created.
+- Renders use one worker and two encoder threads. Each worker holds the piece's images in memory (a tutorial with 250 captures takes about 2.5 GB) and runs its own encoder, so on a machine that also serves something else, look at the free memory before raising them with `--workers N` and `--threads N` (or `WB_RENDER_WORKERS` and `WB_RENDER_THREADS`).
 - Fonts come from `core/bin/fetch-fonts.sh` into `assets/fonts/`.
 - A bench's `npm install` is needed once before its first render.

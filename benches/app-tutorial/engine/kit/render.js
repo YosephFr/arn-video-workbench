@@ -13,8 +13,12 @@
 //   render.mjs <piece> review                           a still of every moment worth checking, in order
 // Rendering is deterministic: frame N shows exactly time N / fps. Workers render disjoint frame ranges into H.264
 // chunks that are concatenated without re-encoding, then muxed with the mix.
+//
+// Parallelism is opt-in: preview and final run on one worker with two encoder threads. Every worker decodes all the
+// captures of the film (about 10 MB each at 3x) and runs its own encoder, so a capture-heavy film on many workers
+// can exhaust the memory of a machine that also serves something else. On a machine of your own, raise them with
+// --workers N and --threads N, or with WB_RENDER_WORKERS and WB_RENDER_THREADS.
 const fs = require('fs');
-const os = require('os');
 const path = require('path');
 const { spawn, fork, execFileSync } = require('child_process');
 const { createCanvas } = require('./canvas');
@@ -22,6 +26,8 @@ const { Frame } = require('./frame');
 const { defineTutorial } = require('./tutorial');
 const { checkFilm } = require('./check');
 const { options: captureOptions } = require('./captures');
+
+const limit = (flag, env, fallback) => Math.max(1, parseInt(flag === true ? '' : flag || process.env[env] || fallback, 10) || parseInt(fallback, 10));
 
 function parseArgs(argv) {
   const a = { _: [] };
@@ -79,7 +85,7 @@ async function chunkWorker(film, a) {
   const scale = parseFloat(a.scale); const fps = film.fps; const f0 = parseInt(a.f0, 10), f1 = parseInt(a.f1, 10);
   const f = new Frame({ scale, fps }); await film.init({ scale });
   const ff = spawn('ffmpeg', ['-v', 'error', '-y', '-f', 'rawvideo', '-pix_fmt', 'rgba', '-s', `${f.PW}x${f.PH}`, '-r', String(fps), '-i', '-',
-    '-c:v', 'libx264', '-preset', a.preset, '-crf', String(a.crf), ...(a.maxrate && a.maxrate !== 'none' ? ['-maxrate', a.maxrate, '-bufsize', a.maxrate] : []),
+    '-c:v', 'libx264', '-threads', String(limit(a.threads, 'WB_RENDER_THREADS', '2')), '-preset', a.preset, '-crf', String(a.crf), ...(a.maxrate && a.maxrate !== 'none' ? ['-maxrate', a.maxrate, '-bufsize', a.maxrate] : []),
     '-pix_fmt', 'yuv420p', '-profile:v', 'high', '-x264-params', 'keyint=90:min-keyint=1:colorprim=bt709:transfer=bt709:colormatrix=bt709',
     '-color_primaries', 'bt709', '-color_trc', 'bt709', '-colorspace', 'bt709', a.chunk], { stdio: ['pipe', 'inherit', 'inherit'] });
   const write = (buf) => new Promise((res) => { if (!ff.stdin.write(buf)) ff.stdin.once('drain', res); else res(); });
@@ -95,7 +101,7 @@ async function video(film, piece, a, entry, mode) {
   const fps = film.fps; const scale = parseFloat(a.scale);
   const from = parseFloat(a.from || '0'); const to = Math.min(parseFloat(a.to || String(film.duration)), film.duration);
   const F0 = Math.round(from * fps), F1 = Math.round(to * fps); const total = F1 - F0;
-  const workers = Math.max(1, Math.min(parseInt(a.workers || String(Math.max(1, Math.min(os.cpus().length - 2, 10))), 10), Math.ceil(total / 30)));
+  const workers = Math.min(limit(a.workers, 'WB_RENDER_WORKERS', '1'), Math.ceil(total / 30)); const threads = limit(a.threads, 'WB_RENDER_THREADS', '2');
   const out = path.resolve(a.out || path.join(piece, 'renders', `${mode}.mp4`)); const tmp = path.join(path.dirname(out), `.chunks-${path.basename(out, '.mp4')}`);
   fs.rmSync(tmp, { recursive: true, force: true }); fs.mkdirSync(tmp, { recursive: true });
   const per = Math.ceil(total / workers); const t0 = Date.now(); const prog = new Array(workers).fill(0); const jobs = [];
@@ -103,7 +109,7 @@ async function video(film, piece, a, entry, mode) {
     const s = F0 + w * per, e = Math.min(F1, s + per); if (s >= e) break;
     const chunk = path.join(tmp, `c${String(w).padStart(3, '0')}.mp4`);
     jobs.push(new Promise((res, rej) => {
-      const cp = fork(entry, [piece, '--worker', '--scale', String(scale), '--f0', String(s), '--f1', String(e), '--chunk', chunk, '--crf', String(a.crf), '--preset', a.preset, '--maxrate', a.maxrate || 'none'], { env: process.env });
+      const cp = fork(entry, [piece, '--worker', '--scale', String(scale), '--f0', String(s), '--f1', String(e), '--chunk', chunk, '--crf', String(a.crf), '--preset', a.preset, '--maxrate', a.maxrate || 'none', '--threads', String(threads)], { env: process.env });
       cp.on('message', (m) => { if (m.progress !== undefined) { prog[w] = m.progress; process.stdout.write(`\r  ${mode}: ${prog.reduce((x, y) => x + y, 0)}/${total} frames (${((Date.now() - t0) / 1000).toFixed(0)} s)   `); } });
       cp.on('exit', (c) => (c === 0 ? res(chunk) : rej(new Error(`worker ${w} exited ${c}`))));
     }));
@@ -115,10 +121,10 @@ async function video(film, piece, a, entry, mode) {
   const mix = path.join(piece, 'audio', 'mix.wav'); const withAudio = !a.silent && fs.existsSync(mix);
   if (withAudio) {
     await run1('ffmpeg', ['-v', 'error', '-y', '-i', silent, '-ss', String(from), '-i', mix, '-map', '0:v', '-map', '1:a', '-c:v', 'copy', ...BT709,
-      '-af', 'apad', '-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-t', (total / fps).toFixed(3), '-movflags', '+faststart', out]);
+      '-af', 'apad', '-c:a', 'aac', '-b:a', '256k', '-ar', '48000', '-threads', String(threads), '-t', (total / fps).toFixed(3), '-movflags', '+faststart', out]);
   } else await run1('ffmpeg', ['-v', 'error', '-y', '-i', silent, '-c', 'copy', ...BT709, '-movflags', '+faststart', out]);
   fs.rmSync(tmp, { recursive: true, force: true });
-  console.log(`${mode} → ${path.relative(process.cwd(), out)}  (${total} frames, ${((Date.now() - t0) / 1000).toFixed(1)} s, ${workers} workers${withAudio ? ', with the mix' : ', silent'})`);
+  console.log(`${mode} → ${path.relative(process.cwd(), out)}  (${total} frames, ${((Date.now() - t0) / 1000).toFixed(1)} s, ${workers} worker${workers > 1 ? 's' : ''}, ${threads} encoder threads${withAudio ? ', with the mix' : ', silent'})`);
   if (!withAudio && mode !== 'preview' && !a.silent) console.warn('  no audio/mix.wav yet: run core/bin/wb mix <piece> and render again');
   return out;
 }
